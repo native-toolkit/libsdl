@@ -1,0 +1,5 @@
+<xml>
+
+    <compilerflag value="-DHAVE_LIBC" />
+
+</xml>
