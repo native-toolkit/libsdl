@@ -1,5 +1,6 @@
 <xml>
 
     <compilerflag value="-DHAVE_LIBC" />
+    <compilerflag value="-DNATIVE_TOOLKIT_SDL"/>
 
-</xml>
+</xml> 
