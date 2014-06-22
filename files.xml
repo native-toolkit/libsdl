@@ -374,12 +374,12 @@
 
     </files>
 
-    <!-- <target id="libs-sdl" output="${LIBPREFIX}SDL2${DBG}${LIBEXTRA}" tool="linker" toolid="static_link" if="LUMEN_LIB_SDL_STATIC_EXTERNAL">
+    <!-- <target id="libs-sdl" output="${LIBPREFIX}SDL2${DBG}${LIBEXTRA}" tool="linker" toolid="static_link" if="NATIVE_TOOLKIT_SDL_STATIC_EXTERNAL">
         <files id="libs-sdl"/>
         <outdir name="lib/${BINDIR}"/>
     </target>
 
-    <target id="libs-sdl-shared" output="${LIBPREFIX}SDL2${DBG}${LIBEXTRA}" tool="linker" toolid="${STD_MODULE_LINK}" if="LUMEN_LIB_SDL_SHARED_EXTERNAL">
+    <target id="libs-sdl-shared" output="${LIBPREFIX}SDL2${DBG}${LIBEXTRA}" tool="linker" toolid="${STD_MODULE_LINK}" if="NATIVE_TOOLKIT_SDL_SHARED_EXTERNAL">
 
         <section if="mac">
             <vflag name="-l" value="iconv"/>
