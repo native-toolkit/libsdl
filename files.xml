@@ -368,7 +368,7 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/android/SDL_androidvideo.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/android/SDL_androidwindow.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/haptic/dummy/SDL_syshaptic.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/filesystem/dummy/SDL_sysfilesystem.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/filesystem/android/SDL_sysfilesystem.c" />
 
         </section>
 
