@@ -27,13 +27,9 @@
 #include "SDL_events_c.h"
 #include "SDL_gesture_c.h"
 
-#if !defined(__PSP__)
-#include <memory.h>
-#endif
-
-#include <string.h>
+/*
 #include <stdio.h>
-#include <math.h>
+*/
 
 /* TODO: Replace with malloc */
 
@@ -477,7 +473,6 @@ static int SDL_SendDollarRecord(SDL_GestureTouch* touch,SDL_GestureID gestureId)
 void SDL_GestureProcessEvent(SDL_Event* event)
 {
     float x,y;
-    SDL_FloatPoint path[DOLLARNPOINTS];
     int index;
     int i;
     float pathDx, pathDy;
@@ -501,6 +496,8 @@ void SDL_GestureProcessEvent(SDL_Event* event)
 
         /* Finger Up */
         if (event->type == SDL_FINGERUP) {
+            SDL_FloatPoint path[DOLLARNPOINTS];
+
             inTouch->numDownFingers--;
 
 #ifdef ENABLE_DOLLAR

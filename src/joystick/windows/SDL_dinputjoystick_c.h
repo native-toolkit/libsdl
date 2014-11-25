@@ -18,27 +18,13 @@
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
+#include "../../SDL_internal.h"
 
-#import <UIKit/UIKit.h>
-#import <SDL_types.h>
+extern int SDL_DINPUT_JoystickInit(void);
+extern void SDL_DINPUT_JoystickDetect(JoyStick_DeviceData **pContext);
+extern int SDL_DINPUT_JoystickOpen(SDL_Joystick * joystick, JoyStick_DeviceData *joystickdevice);
+extern void SDL_DINPUT_JoystickUpdate(SDL_Joystick * joystick);
+extern void SDL_DINPUT_JoystickClose(SDL_Joystick * joystick);
+extern void SDL_DINPUT_JoystickQuit(void);
 
-/* *INDENT-OFF* */
-@interface SDLUIAccelerationDelegate: NSObject <UIAccelerometerDelegate> {
-
-	UIAccelerationValue x, y, z;
-	BOOL isRunning;
-	BOOL hasNewData;
-	
-}
-
-+(SDLUIAccelerationDelegate *)sharedDelegate;
--(void)accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration;
--(void)getLastOrientation:(Sint16 *)data;
--(void)startup;
--(void)shutdown;
--(BOOL)isRunning;
--(BOOL)hasNewData;
--(void)setHasNewData:(BOOL)value;
-
-@end
-/* *INDENT-ON* */
+/* vi: set ts=4 sw=4 expandtab: */

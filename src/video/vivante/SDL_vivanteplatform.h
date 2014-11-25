@@ -18,11 +18,28 @@
      misrepresented as being the original software.
   3. This notice may not be removed or altered from any source distribution.
 */
+#include "../../SDL_internal.h"
 
-extern int DirectInputHaptic_MaybeAddDevice(const DIDEVICEINSTANCE *pdidInstance);
-extern int DirectInputHaptic_MaybeRemoveDevice(const DIDEVICEINSTANCE *pdidInstance);
-extern int XInputHaptic_MaybeAddDevice(const DWORD dwUserid);
-extern int XInputHaptic_MaybeRemoveDevice(const DWORD dwUserid);
+#ifndef _SDL_vivanteplatform_h
+#define _SDL_vivanteplatform_h
+
+#if SDL_VIDEO_DRIVER_VIVANTE
+
+#include "SDL_vivantevideo.h"
+
+#if defined(CAVIUM)
+#define VIVANTE_PLATFORM_CAVIUM
+#elif defined(MARVELL)
+#define VIVANTE_PLATFORM_MARVELL
+#else
+#define VIVANTE_PLATFORM_GENERIC
+#endif
+
+extern int VIVANTE_SetupPlatform(_THIS);
+extern void VIVANTE_CleanupPlatform(_THIS);
+
+#endif /* SDL_VIDEO_DRIVER_VIVANTE */
+
+#endif /* _SDL_vivanteplatform_h */
 
 /* vi: set ts=4 sw=4 expandtab: */
-
