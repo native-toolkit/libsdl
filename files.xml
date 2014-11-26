@@ -284,14 +284,14 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/windows/SDL_windows.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/windows/SDL_xinput.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/filesystem/windows/SDL_sysfilesystem.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/windows/SDL_dxjoystick.c" />
+            <!-- <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/windows/SDL_dxjoystick.c" /> removed in 2.0.4?-->
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/windows/SDL_mmjoystick.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/windows/SDL_dinputjoystick.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/windows/SDL_windowsjoystick.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/windows/SDL_xinputjoystick.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/winrt/SDL_xinputjoystick.c" />
+            <!-- <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/winrt/SDL_xinputjoystick.c" />  removed in 2.0.4? -->
             <!-- <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/main/windows/SDL_windows_main.c" /> -->
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/haptic/windows/SDL_syshaptic.c" />
+            <!-- <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/haptic/windows/SDL_syshaptic.c" />  removed in 2.0.4?-->
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/haptic/windows/SDL_dinputhaptic.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/haptic/windows/SDL_windowshaptic.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/haptic/windows/SDL_xinputhaptic.c" />
