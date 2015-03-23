@@ -79,7 +79,9 @@
             </section>
 
             <section if="linux">
-
+                <lib name="-lpthread" />
+                <lib name="-lrt" />
+                <lib name="-lGL" />
             </section>
 
         </section>
