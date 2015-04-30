@@ -18,6 +18,7 @@
         <section if="windows">
 
             <compilerflag value="-DUSING_GENERATED_CONFIG_H" />
+            <compilerflag value="-DNATIVE_TOOLKIT_SDL_ANGLE" if="NATIVE_TOOLKIT_SDL_ANGLE" />
 
         </section>
 
