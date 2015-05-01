@@ -223,7 +223,7 @@ typedef unsigned int uintptr_t;
 #define SDL_VIDEO_RENDER_OGL    0
 #endif
 #ifndef SDL_VIDEO_RENDER_OGL_ES2
-#define SDL_VIDEO_RENDER_OGL_ES2    0
+#define SDL_VIDEO_RENDER_OGL_ES2    1
 #endif
 #ifndef SDL_VIDEO_OPENGL_ES2
 #define SDL_VIDEO_OPENGL_ES2    1
