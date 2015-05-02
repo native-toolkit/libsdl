@@ -214,7 +214,7 @@ typedef unsigned int uintptr_t;
 
 /* Enable OpenGL support (ES2/ANGLE) */
 #ifndef SDL_VIDEO_OPENGL
-#define SDL_VIDEO_OPENGL    1
+#define SDL_VIDEO_OPENGL    0
 #endif
 #ifndef SDL_VIDEO_OPENGL_WGL
 #define SDL_VIDEO_OPENGL_WGL    0
