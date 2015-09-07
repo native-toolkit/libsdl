@@ -31,7 +31,7 @@
 #include "SDL_loadso.h"
 #include "SDL_hints.h"
 
-#if SDL_VIDEO_DRIVER_RPI
+#if RASPBERRYPI || SDL_VIDEO_DRIVER_RPI
 /* Raspbian places the OpenGL ES/EGL binaries in a non standard path */
 #define DEFAULT_EGL "/opt/vc/lib/libEGL.so"
 #define DEFAULT_OGL_ES2 "/opt/vc/lib/libGLESv2.so"
