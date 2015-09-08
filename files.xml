@@ -376,7 +376,7 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/uikit/SDL_uikitviewcontroller.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/uikit/SDL_uikitwindow.m" />
 
-            <!-- <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/iphoneos/SDLUIAccelerationDelegate.m" /> removed in 2.0.4 -->
+            <compilerflag value="-fobjc-arc" />
 
         </section>
 
