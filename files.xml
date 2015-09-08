@@ -390,8 +390,21 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/android/SDL_androidvideo.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/android/SDL_androidwindow.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/android/SDL_androidmessagebox.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/android/SDL_androidmouse.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/haptic/dummy/SDL_syshaptic.c" />
 
+        </section>
+
+        <section if="emscripten">
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/emscripten/SDL_emscriptenevents.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/emscripten/SDL_emscriptenframebuffer.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/emscripten/SDL_emscriptenmouse.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/emscripten/SDL_emscriptenopengles.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/emscripten/SDL_emscriptenvideo.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/power/emscripten/SDL_syspower.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/emscripten/SDL_sysjoystick.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/filesystem/emscripten/SDL_sysfilesystem.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/emscripten/SDL_emscriptenaudio.c" />
         </section>
 
     </files>
