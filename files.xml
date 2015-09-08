@@ -1,7 +1,5 @@
 <xml>
 
-    <include name="${HXCPP}/build-tool/BuildCommon.xml" />
-
     <files id="native-toolkit-sdl">
 
         <compilerflag value="-I${NATIVE_TOOLKIT_PATH}/sdl/include/" />
