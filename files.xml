@@ -12,7 +12,8 @@
         <compilerflag value="-DGL_GLEXT_PROTOTYPES" if="android || rpi" />
         <compilerflag value="-DHAVE_LIBC" />
 
-        <compilerflag value="-D__IPHONEOS__" if="ios" />
+        <compilerflag value="-D__IPHONEOS__" if="ios || tvos" />
+        <compilerflag value="-D__TVOS__" if="tvos" />
 
         <section if="windows">
 
@@ -163,7 +164,7 @@
 
         </section>
 
-        <section if="android || ios || windows || rpi" >
+        <section if="android || ios || windows || rpi || tvos" >
 
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/SDL_egl.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/opengles/SDL_render_gles.c" />
@@ -357,7 +358,7 @@
 
         </section>
 
-        <section if="ios">
+        <section if="ios || tvos">
 
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/coreaudio/SDL_coreaudio.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/file/cocoa/SDL_rwopsbundlesupport.m" />
