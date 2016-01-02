@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2015 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -371,6 +371,23 @@ SDL_JoystickInstanceID(SDL_Joystick * joystick)
     }
 
     return (joystick->instance_id);
+}
+
+/*
+ * Find the SDL_Joystick that owns this instance id
+ */
+SDL_Joystick *
+SDL_JoystickFromInstanceID(SDL_JoystickID joyid)
+{
+    SDL_Joystick *joystick = SDL_joysticks;
+    while (joystick) {
+        if (joystick->instance_id == joyid) {
+            return joystick;
+        }
+        joystick = joystick->next;
+    }
+
+    return NULL;
 }
 
 /*

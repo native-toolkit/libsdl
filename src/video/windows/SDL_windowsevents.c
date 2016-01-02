@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2015 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -415,12 +415,19 @@ WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                  * FIXME: Update keyboard state
                  */
                 WIN_CheckClipboardUpdate(data->videodata);
+
+                SDL_ToggleModState(KMOD_CAPS, (GetKeyState(VK_CAPITAL) & 0x0001) != 0);
+                SDL_ToggleModState(KMOD_NUM, (GetKeyState(VK_NUMLOCK) & 0x0001) != 0);
             } else {
+                data->in_window_deactivation = SDL_TRUE;
+
                 if (SDL_GetKeyboardFocus() == data->window) {
                     SDL_SetKeyboardFocus(NULL);
                 }
 
                 ClipCursor(NULL);
+
+                data->in_window_deactivation = SDL_FALSE;
             }
         }
         returnCode = 0;
