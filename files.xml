@@ -1,7 +1,5 @@
 <xml>
 
-    <include name="${HXCPP}/build-tool/BuildCommon.xml" />
-
     <files id="native-toolkit-sdl">
 
         <compilerflag value="-I${NATIVE_TOOLKIT_PATH}/sdl/include/" />
@@ -14,7 +12,8 @@
         <compilerflag value="-DGL_GLEXT_PROTOTYPES" if="android || rpi" />
         <compilerflag value="-DHAVE_LIBC" />
 
-        <compilerflag value="-D__IPHONEOS__" if="ios" />
+        <compilerflag value="-D__IPHONEOS__" if="ios || tvos" />
+        <compilerflag value="-D__TVOS__" if="tvos" />
 
         <section if="windows">
 
@@ -41,6 +40,12 @@
             <compilerflag value="-I/opt/vc/include/interface/vmcs_host/linux" if="rpi" />
             <compilerflag value="-I/usr/include/interface/vcos/pthreads" if="rpi" />
             <compilerflag value="-I/usr/include/interface/vmcs_host/linux" if="rpi" />
+
+            <set name="XINPUT2" value="${NATIVE_TOOLKIT_SDL_X11_XINPUT2}"/>
+            <compilerflag value="-DNATIVE_TOOLKIT_SDL_X11_XINPUT2=${XINPUT2}" if="XINPUT2" />
+            <compilerflag value="-DNATIVE_TOOLKIT_SDL_X11_XINPUT2_SUPPORTS_MULTITOUCH=${XINPUT2}" if="XINPUT2"/>
+            <compilerflag value="-DNATIVE_TOOLKIT_SDL_X11_XINPUT2=0" unless="XINPUT2" />
+            <compilerflag value="-DNATIVE_TOOLKIT_SDL_X11_XINPUT2_SUPPORTS_MULTITOUCH=0" unless="XINPUT2"/>
 
         </section>
 
@@ -159,7 +164,7 @@
 
         </section>
 
-        <section if="android || ios || windows || rpi" >
+        <section if="android || ios || windows || rpi || tvos" >
 
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/SDL_egl.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/opengles/SDL_render_gles.c" />
@@ -353,7 +358,7 @@
 
         </section>
 
-        <section if="ios">
+        <section if="ios || tvos">
 
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/coreaudio/SDL_coreaudio.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/file/cocoa/SDL_rwopsbundlesupport.m" />
@@ -372,7 +377,7 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/uikit/SDL_uikitviewcontroller.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/uikit/SDL_uikitwindow.m" />
 
-            <!-- <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/iphoneos/SDLUIAccelerationDelegate.m" /> removed in 2.0.4 -->
+            <compilerflag value="-fobjc-arc" />
 
         </section>
 
@@ -392,8 +397,21 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/android/SDL_androidvideo.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/android/SDL_androidwindow.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/android/SDL_androidmessagebox.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/android/SDL_androidmouse.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/haptic/dummy/SDL_syshaptic.c" />
 
+        </section>
+
+        <section if="emscripten">
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/emscripten/SDL_emscriptenevents.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/emscripten/SDL_emscriptenframebuffer.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/emscripten/SDL_emscriptenmouse.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/emscripten/SDL_emscriptenopengles.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/emscripten/SDL_emscriptenvideo.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/power/emscripten/SDL_syspower.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/emscripten/SDL_sysjoystick.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/filesystem/emscripten/SDL_sysfilesystem.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/emscripten/SDL_emscriptenaudio.c" />
         </section>
 
     </files>
