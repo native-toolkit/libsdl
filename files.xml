@@ -1,13 +1,18 @@
 <xml>
 
+    <section unless="SDL_CONFIG_PATH" >
+       <set name="SDL_CONFIG_PATH" value="${NATIVE_TOOLKIT_PATH}/sdl/include/configs/default/" unless="windows || mac || linux || rpi" />
+       <set name="SDL_CONFIG_PATH" value="${NATIVE_TOOLKIT_PATH}/sdl/include/configs/linux/" if="linux" unless="rpi"/>
+       <set name="SDL_CONFIG_PATH" value="${NATIVE_TOOLKIT_PATH}/sdl/include/configs/windows/" if="windows" />
+       <set name="SDL_CONFIG_PATH" value="${NATIVE_TOOLKIT_PATH}/sdl/include/configs/mac/" if="mac" />
+       <set name="SDL_CONFIG_PATH" value="${NATIVE_TOOLKIT_PATH}/sdl/include/configs/rpi/" if="rpi" />
+    </section>
+
+
     <files id="native-toolkit-sdl">
 
         <compilerflag value="-I${NATIVE_TOOLKIT_PATH}/sdl/include/" />
-        <compilerflag value="-I${NATIVE_TOOLKIT_PATH}/sdl/include/configs/default/" unless="windows || mac || linux || rpi" />
-        <compilerflag value="-I${NATIVE_TOOLKIT_PATH}/sdl/include/configs/linux/" if="linux" unless="rpi"/>
-        <compilerflag value="-I${NATIVE_TOOLKIT_PATH}/sdl/include/configs/windows/" if="windows" />
-        <compilerflag value="-I${NATIVE_TOOLKIT_PATH}/sdl/include/configs/mac/" if="mac" />
-        <compilerflag value="-I${NATIVE_TOOLKIT_PATH}/sdl/include/configs/rpi/" if="rpi" />
+        <compilerflag value="-I${SDL_CONFIG_PATH}" if="SDL_CONFIG_PATH" />
     
         <compilerflag value="-DGL_GLEXT_PROTOTYPES" if="android || rpi" />
         <compilerflag value="-DHAVE_LIBC" />
