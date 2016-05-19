@@ -109,8 +109,8 @@
 #define SIZEOF_VOIDP 4
 
 /* Enable various audio drivers */
-#define SDL_AUDIO_DRIVER_ANDROID    1
-#define SDL_AUDIO_DRIVER_DUMMY  1
+#define SDL_AUDIO_DRIVER_ANDROID    0
+#define SDL_AUDIO_DRIVER_DUMMY  0
 
 /* Enable various input drivers */
 #define SDL_JOYSTICK_ANDROID    1

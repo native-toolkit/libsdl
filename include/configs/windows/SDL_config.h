@@ -156,11 +156,11 @@ typedef unsigned int uintptr_t;
 #endif
 
 /* Enable various audio drivers */
-#define SDL_AUDIO_DRIVER_DSOUND 1
+#define SDL_AUDIO_DRIVER_DSOUND 0
 #define SDL_AUDIO_DRIVER_XAUDIO2    0
-#define SDL_AUDIO_DRIVER_WINMM  1
-#define SDL_AUDIO_DRIVER_DISK   1
-#define SDL_AUDIO_DRIVER_DUMMY  1
+#define SDL_AUDIO_DRIVER_WINMM  0
+#define SDL_AUDIO_DRIVER_DISK   0
+#define SDL_AUDIO_DRIVER_DUMMY  0
 
 /* Enable various input drivers */
 #define SDL_JOYSTICK_DINPUT 1
