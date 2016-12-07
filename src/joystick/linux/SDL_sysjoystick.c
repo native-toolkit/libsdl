@@ -81,7 +81,7 @@ static int
 IsJoystick(int fd, char *namebuf, const size_t namebuflen, SDL_JoystickGUID *guid)
 {
     struct input_id inpid;
-    Uint16 *guid16 = (Uint16 *) ((char *) &guid->data);
+    Uint16 *guid16 = (Uint16 *)guid->data;
 
 #if !SDL_USE_LIBUDEV
     /* When udev is enabled we only get joystick devices here, so there's no need to test them */
@@ -110,23 +110,23 @@ IsJoystick(int fd, char *namebuf, const size_t namebuflen, SDL_JoystickGUID *gui
     }
 
 #ifdef DEBUG_JOYSTICK
-    printf("Joystick: %s, bustype = %d, vendor = 0x%x, product = 0x%x, version = %d\n", namebuf, inpid.bustype, inpid.vendor, inpid.product, inpid.version);
+    printf("Joystick: %s, bustype = %d, vendor = 0x%.4x, product = 0x%.4x, version = %d\n", namebuf, inpid.bustype, inpid.vendor, inpid.product, inpid.version);
 #endif
 
     SDL_memset(guid->data, 0, sizeof(guid->data));
 
     /* We only need 16 bits for each of these; space them out to fill 128. */
     /* Byteswap so devices get same GUID on little/big endian platforms. */
-    *(guid16++) = SDL_SwapLE16(inpid.bustype);
-    *(guid16++) = 0;
+    *guid16++ = SDL_SwapLE16(inpid.bustype);
+    *guid16++ = 0;
 
-    if (inpid.vendor && inpid.product && inpid.version) {
-        *(guid16++) = SDL_SwapLE16(inpid.vendor);
-        *(guid16++) = 0;
-        *(guid16++) = SDL_SwapLE16(inpid.product);
-        *(guid16++) = 0;
-        *(guid16++) = SDL_SwapLE16(inpid.version);
-        *(guid16++) = 0;
+    if (inpid.vendor && inpid.product) {
+        *guid16++ = SDL_SwapLE16(inpid.vendor);
+        *guid16++ = 0;
+        *guid16++ = SDL_SwapLE16(inpid.product);
+        *guid16++ = 0;
+        *guid16++ = SDL_SwapLE16(inpid.version);
+        *guid16++ = 0;
     } else {
         SDL_strlcpy((char*)guid16, namebuf, sizeof(guid->data) - 4);
     }
@@ -282,6 +282,7 @@ MaybeRemoveDevice(const char *path)
 }
 #endif
 
+#if ! SDL_USE_LIBUDEV
 static int
 JoystickInitWithoutUdev(void)
 {
@@ -298,7 +299,7 @@ JoystickInitWithoutUdev(void)
 
     return numjoysticks;
 }
-
+#endif
 
 #if SDL_USE_LIBUDEV
 static int
@@ -342,17 +343,19 @@ SDL_SYS_JoystickInit(void)
 
 #if SDL_USE_LIBUDEV
     return JoystickInitWithUdev();
-#endif
-
+#else 
     return JoystickInitWithoutUdev();
+#endif
 }
 
-int SDL_SYS_NumJoysticks()
+int
+SDL_SYS_NumJoysticks(void)
 {
     return numjoysticks;
 }
 
-void SDL_SYS_JoystickDetect()
+void
+SDL_SYS_JoystickDetect(void)
 {
 #if SDL_USE_LIBUDEV
     SDL_UDEV_Poll();
@@ -446,16 +449,16 @@ ConfigJoystick(SDL_Joystick * joystick, int fd)
 #ifdef DEBUG_INPUT_EVENTS
                 printf("Joystick has button: 0x%x\n", i);
 #endif
-                joystick->hwdata->key_map[i - BTN_MISC] = joystick->nbuttons;
+                joystick->hwdata->key_map[i] = joystick->nbuttons;
                 ++joystick->nbuttons;
             }
         }
-        for (i = BTN_MISC; i < BTN_JOYSTICK; ++i) {
+        for (i = 0; i < BTN_JOYSTICK; ++i) {
             if (test_bit(i, keybit)) {
 #ifdef DEBUG_INPUT_EVENTS
                 printf("Joystick has button: 0x%x\n", i);
 #endif
-                joystick->hwdata->key_map[i - BTN_MISC] = joystick->nbuttons;
+                joystick->hwdata->key_map[i] = joystick->nbuttons;
                 ++joystick->nbuttons;
             }
         }
@@ -712,12 +715,9 @@ HandleInputEvents(SDL_Joystick * joystick)
             code = events[i].code;
             switch (events[i].type) {
             case EV_KEY:
-                if (code >= BTN_MISC) {
-                    code -= BTN_MISC;
-                    SDL_PrivateJoystickButton(joystick,
-                                              joystick->hwdata->key_map[code],
-                                              events[i].value);
-                }
+                SDL_PrivateJoystickButton(joystick,
+                                          joystick->hwdata->key_map[code],
+                                          events[i].value);
                 break;
             case EV_ABS:
                 switch (code) {

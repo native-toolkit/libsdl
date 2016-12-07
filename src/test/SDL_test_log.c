@@ -26,7 +26,9 @@
 */
 
 /* quiet windows compiler warnings */
-#define _CRT_SECURE_NO_WARNINGS
+#if defined(_MSC_VER)
+# define _CRT_SECURE_NO_WARNINGS
+#endif
 
 #include "SDL_config.h"
 
@@ -50,7 +52,7 @@
  *
  * \return Ascii representation of the timestamp in localtime in the format '08/23/01 14:55:02'
  */
-char *SDLTest_TimestampToString(const time_t timestamp)
+static char *SDLTest_TimestampToString(const time_t timestamp)
 {
     time_t copy;
     static char buffer[64];
