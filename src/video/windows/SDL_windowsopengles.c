@@ -129,12 +129,16 @@ WIN_GLES_SetupWindow(_THIS, SDL_Window * window)
 int
 WIN_GLES_SetSwapInterval(_THIS, int interval)
 {
+    #ifndef NATIVE_TOOLKIT_STATIC_ANGLE
     /* FIXME: This should call SDL_EGL_SetSwapInterval, but ANGLE has a bug that prevents this
      * from working if we do (the window contents freeze and don't swap properly). So, we ignore
      * the request for now.
      */
     SDL_Log("WARNING: Ignoring SDL_GL_SetSwapInterval call due to ANGLE bug");
     return 0;
+    #else
+    return SDL_EGL_SetSwapInterval(_this, interval);
+    #endif
 }
 
 #endif /* SDL_VIDEO_DRIVER_WINDOWS && SDL_VIDEO_OPENGL_EGL */
