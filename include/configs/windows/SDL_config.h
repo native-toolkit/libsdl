@@ -156,11 +156,11 @@ typedef unsigned int uintptr_t;
 #endif
 
 /* Enable various audio drivers */
-#define SDL_AUDIO_DRIVER_DSOUND 1
+#define SDL_AUDIO_DRIVER_DSOUND 0
 #define SDL_AUDIO_DRIVER_XAUDIO2    0
-#define SDL_AUDIO_DRIVER_WINMM  1
-#define SDL_AUDIO_DRIVER_DISK   1
-#define SDL_AUDIO_DRIVER_DUMMY  1
+#define SDL_AUDIO_DRIVER_WINMM  0
+#define SDL_AUDIO_DRIVER_DISK   0
+#define SDL_AUDIO_DRIVER_DUMMY  0
 
 /* Enable various input drivers */
 #define SDL_JOYSTICK_DINPUT 1
@@ -198,7 +198,7 @@ typedef unsigned int uintptr_t;
 #define SDL_VIDEO_OPENGL_WGL    1
 #endif
 #ifndef SDL_VIDEO_RENDER_OGL
-#define SDL_VIDEO_RENDER_OGL    1
+#define SDL_VIDEO_RENDER_OGL    0
 #endif
 #ifndef SDL_VIDEO_RENDER_OGL_ES2
 #define SDL_VIDEO_RENDER_OGL_ES2    0
@@ -214,7 +214,7 @@ typedef unsigned int uintptr_t;
 
 /* Enable OpenGL support (ES2/ANGLE) */
 #ifndef SDL_VIDEO_OPENGL
-#define SDL_VIDEO_OPENGL    1
+#define SDL_VIDEO_OPENGL    0
 #endif
 #ifndef SDL_VIDEO_OPENGL_WGL
 #define SDL_VIDEO_OPENGL_WGL    0
@@ -223,7 +223,7 @@ typedef unsigned int uintptr_t;
 #define SDL_VIDEO_RENDER_OGL    0
 #endif
 #ifndef SDL_VIDEO_RENDER_OGL_ES2
-#define SDL_VIDEO_RENDER_OGL_ES2    1
+#define SDL_VIDEO_RENDER_OGL_ES2    0
 #endif
 #ifndef SDL_VIDEO_OPENGL_ES2
 #define SDL_VIDEO_OPENGL_ES2    1
