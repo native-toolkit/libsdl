@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -530,7 +530,7 @@ DirectFB_CreateTexture(SDL_Renderer * renderer, SDL_Texture * texture)
     /* find the right pixelformat */
     pixelformat = DirectFB_SDLToDFBPixelFormat(texture->format);
     if (pixelformat == DSPF_UNKNOWN) {
-        SDL_SetError("Unknown pixel format %d\n", data->format);
+        SDL_SetError("Unknown pixel format %d", data->format);
         goto error;
     }
 

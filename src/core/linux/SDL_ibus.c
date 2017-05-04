@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -45,7 +45,7 @@ static char *input_ctx_path = NULL;
 static SDL_Rect ibus_cursor_rect = { 0, 0, 0, 0 };
 static DBusConnection *ibus_conn = NULL;
 static char *ibus_addr_file = NULL;
-int inotify_fd = -1, inotify_wd = -1;
+static int inotify_fd = -1, inotify_wd = -1;
 
 static Uint32
 IBus_ModState(void)
@@ -680,3 +680,5 @@ SDL_IBus_PumpEvents(void)
 }
 
 #endif
+
+/* vi: set ts=4 sw=4 expandtab: */

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -275,7 +275,7 @@ GL_LoadFunctions(GL_RenderData * data)
     do { \
         data->func = SDL_GL_GetProcAddress(#func); \
         if ( ! data->func ) { \
-            return SDL_SetError("Couldn't load GL function %s: %s\n", #func, SDL_GetError()); \
+            return SDL_SetError("Couldn't load GL function %s: %s", #func, SDL_GetError()); \
         } \
     } while ( 0 );
 #endif /* __SDL_NOGETPROCADDR__ */
@@ -493,7 +493,7 @@ GL_CreateRenderer(SDL_Window * window, Uint32 flags)
         PFNGLDEBUGMESSAGECALLBACKARBPROC glDebugMessageCallbackARBFunc = (PFNGLDEBUGMESSAGECALLBACKARBPROC) SDL_GL_GetProcAddress("glDebugMessageCallbackARB");
 
         data->GL_ARB_debug_output_supported = SDL_TRUE;
-        data->glGetPointerv(GL_DEBUG_CALLBACK_FUNCTION_ARB, (GLvoid **)&data->next_error_callback);
+        data->glGetPointerv(GL_DEBUG_CALLBACK_FUNCTION_ARB, (GLvoid **)(char *)&data->next_error_callback);
         data->glGetPointerv(GL_DEBUG_CALLBACK_USER_PARAM_ARB, &data->next_error_userparam);
         glDebugMessageCallbackARBFunc(GL_HandleDebugMessage, renderer);
 
@@ -1041,6 +1041,8 @@ GL_UpdateViewport(SDL_Renderer * renderer)
                            0.0, 1.0);
         }
     }
+    data->glMatrixMode(GL_MODELVIEW);
+
     return GL_CheckError("", renderer);
 }
 
@@ -1430,16 +1432,19 @@ GL_RenderReadPixels(SDL_Renderer * renderer, const SDL_Rect * rect,
 
     GL_ActivateRenderer(renderer);
 
+    if (!convert_format(data, temp_format, &internalFormat, &format, &type)) {
+        return SDL_SetError("Texture format %s not supported by OpenGL",
+                            SDL_GetPixelFormatName(temp_format));
+    }
+
+    if (!rect->w || !rect->h) {
+        return 0;  /* nothing to do. */
+    }
+
     temp_pitch = rect->w * SDL_BYTESPERPIXEL(temp_format);
     temp_pixels = SDL_malloc(rect->h * temp_pitch);
     if (!temp_pixels) {
         return SDL_OutOfMemory();
-    }
-
-    if (!convert_format(data, temp_format, &internalFormat, &format, &type)) {
-        SDL_free(temp_pixels);
-        return SDL_SetError("Texture format %s not supported by OpenGL",
-                            SDL_GetPixelFormatName(temp_format));
     }
 
     SDL_GetRendererOutputSize(renderer, &w, &h);

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -38,9 +38,9 @@ extern "C" {
 #include <stdio.h>
 #include <AppKit.h>
 #include <InterfaceKit.h>
-#include <be/game/DirectWindow.h>
+#include <game/DirectWindow.h>
 #if SDL_VIDEO_OPENGL
-#include <be/opengl/GLView.h>
+#include <opengl/GLView.h>
 #endif
 #include "SDL_events.h"
 #include "../../main/haiku/SDL_BApp.h"
@@ -668,3 +668,5 @@ private:
  *                         buffer provided by DirectConnected() is invalidated.
  */
 #endif
+
+/* vi: set ts=4 sw=4 expandtab: */

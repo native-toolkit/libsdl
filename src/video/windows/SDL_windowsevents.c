@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -204,7 +204,7 @@ WIN_ShouldIgnoreFocusClick()
     return !SDL_GetHintBoolean(SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, SDL_FALSE);
 }
 
-void
+static void
 WIN_CheckWParamMouseButton(SDL_bool bwParamMousePressed, SDL_bool bSDLMousePressed, SDL_WindowData *data, Uint8 button, SDL_MouseID mouseID)
 {
     if (data->focus_click_pending & SDL_BUTTON(button)) {
@@ -231,7 +231,7 @@ WIN_CheckWParamMouseButton(SDL_bool bwParamMousePressed, SDL_bool bSDLMousePress
 * Some windows systems fail to send a WM_LBUTTONDOWN sometimes, but each mouse move contains the current button state also
 *  so this funciton reconciles our view of the world with the current buttons reported by windows
 */
-void
+static void
 WIN_CheckWParamMouseButtons(WPARAM wParam, SDL_WindowData *data, SDL_MouseID mouseID)
 {
     if (wParam != data->mouse_button_flags) {
@@ -246,7 +246,7 @@ WIN_CheckWParamMouseButtons(WPARAM wParam, SDL_WindowData *data, SDL_MouseID mou
 }
 
 
-void
+static void
 WIN_CheckRawMouseButtons(ULONG rawButtons, SDL_WindowData *data)
 {
     if (rawButtons != data->mouse_button_flags) {
@@ -275,7 +275,7 @@ WIN_CheckRawMouseButtons(ULONG rawButtons, SDL_WindowData *data)
     }
 }
 
-void
+static void
 WIN_CheckAsyncMouseRelease(SDL_WindowData *data)
 {
     Uint32 mouseFlags;
@@ -309,7 +309,7 @@ WIN_CheckAsyncMouseRelease(SDL_WindowData *data)
     data->mouse_button_flags = 0;
 }
 
-BOOL 
+static BOOL
 WIN_ConvertUTF32toUTF8(UINT32 codepoint, char * text)
 {
     if (codepoint <= 0x7F) {
@@ -515,7 +515,7 @@ WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                             initialMousePoint.y = rawmouse->lLastY;
                         }
 
-                        SDL_SendMouseMotion(data->window, 0, 1, (int)(rawmouse->lLastX-initialMousePoint.x), (int)(rawmouse->lLastY-initialMousePoint.y) );
+                        SDL_SendMouseMotion(data->window, 0, 1, (int)(rawmouse->lLastX-initialMousePoint.x), (int)(rawmouse->lLastY-initialMousePoint.y));
 
                         initialMousePoint.x = rawmouse->lLastX;
                         initialMousePoint.y = rawmouse->lLastY;
@@ -524,10 +524,17 @@ WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 } else if (isCapture) {
                     /* we check for where Windows thinks the system cursor lives in this case, so we don't really lose mouse accel, etc. */
                     POINT pt;
+                    RECT hwndRect;
+                    HWND currentHnd;
+
                     GetCursorPos(&pt);
-                    if (WindowFromPoint(pt) != hwnd) {  /* if in the window, WM_MOUSEMOVE, etc, will cover it. */
-                        ScreenToClient(hwnd, &pt);
-                        SDL_SendMouseMotion(data->window, 0, 0, (int) pt.x, (int) pt.y);
+                    currentHnd = WindowFromPoint(pt);
+                    ScreenToClient(hwnd, &pt);
+                    GetClientRect(hwnd, &hwndRect);
+
+                    /* if in the window, WM_MOUSEMOVE, etc, will cover it. */
+                    if(currentHnd != hwnd || pt.x < 0 || pt.y < 0 || pt.x > hwndRect.right || pt.y > hwndRect.right) {
+                        SDL_SendMouseMotion(data->window, 0, 0, (int)pt.x, (int)pt.y);
                         SDL_SendMouseButton(data->window, 0, GetAsyncKeyState(VK_LBUTTON) & 0x8000 ? SDL_PRESSED : SDL_RELEASED, SDL_BUTTON_LEFT);
                         SDL_SendMouseButton(data->window, 0, GetAsyncKeyState(VK_RBUTTON) & 0x8000 ? SDL_PRESSED : SDL_RELEASED, SDL_BUTTON_RIGHT);
                         SDL_SendMouseButton(data->window, 0, GetAsyncKeyState(VK_MBUTTON) & 0x8000 ? SDL_PRESSED : SDL_RELEASED, SDL_BUTTON_MIDDLE);

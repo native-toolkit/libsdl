@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -38,6 +38,7 @@
 #include "SDL_cocoavideo.h"
 #include "SDL_cocoashape.h"
 #include "SDL_cocoamouse.h"
+#include "SDL_cocoamousetap.h"
 #include "SDL_cocoaopengl.h"
 #include "SDL_assert.h"
 
@@ -1634,8 +1635,13 @@ Cocoa_GetWindowGammaRamp(_THIS, SDL_Window * window, Uint16 * ramp)
 void
 Cocoa_SetWindowGrab(_THIS, SDL_Window * window, SDL_bool grabbed)
 {
-    /* Move the cursor to the nearest point in the window */
+    SDL_Mouse *mouse = SDL_GetMouse();
     SDL_WindowData *data = (SDL_WindowData *) window->driverdata;
+
+    /* Enable or disable the event tap as necessary */
+    Cocoa_EnableMouseEventTap(mouse->driverdata, grabbed);
+
+    /* Move the cursor to the nearest point in the window */
     if (grabbed && data && ![data->listener isMoving]) {
         int x, y;
         CGPoint cgpoint;
@@ -1700,7 +1706,7 @@ Cocoa_GetWindowWMInfo(_THIS, SDL_Window * window, SDL_SysWMinfo * info)
         info->info.cocoa.window = nswindow;
         return SDL_TRUE;
     } else {
-        SDL_SetError("Application not compiled with SDL %d.%d\n",
+        SDL_SetError("Application not compiled with SDL %d.%d",
                      SDL_MAJOR_VERSION, SDL_MINOR_VERSION);
         return SDL_FALSE;
     }

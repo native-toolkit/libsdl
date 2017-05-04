@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -197,7 +197,7 @@ static int GLES_LoadFunctions(GLES_RenderData * data)
     do { \
         data->func = SDL_GL_GetProcAddress(#func); \
         if ( ! data->func ) { \
-            return SDL_SetError("Couldn't load GLES function %s: %s\n", #func, SDL_GetError()); \
+            return SDL_SetError("Couldn't load GLES function %s: %s", #func, SDL_GetError()); \
         } \
     } while ( 0 );
 #define SDL_PROC_OES(ret,func,params) \
@@ -633,8 +633,6 @@ GLES_SetRenderTarget(SDL_Renderer * renderer, SDL_Texture * texture)
     GLES_TextureData *texturedata = NULL;
     GLenum status;
 
-    GLES_ActivateRenderer(renderer);
-
     if (!data->GL_OES_framebuffer_object_supported) {
         return SDL_SetError("Can't enable render target support in this renderer");
     }
@@ -694,6 +692,8 @@ GLES_UpdateViewport(SDL_Renderer * renderer)
                            0.0, 1.0);
         }
     }
+    data->glMatrixMode(GL_MODELVIEW);
+
     return 0;
 }
 

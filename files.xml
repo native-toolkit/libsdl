@@ -150,6 +150,7 @@
 
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/SDL.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/SDL_assert.c" />
+        <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/SDL_dataqueue.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/SDL_error.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/SDL_hints.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/SDL_log.c" />
@@ -355,6 +356,7 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/bsd/SDL_sysjoystick.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/power/linux/SDL_syspower.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/linux/SDL_evdev.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/linux/SDL_evdev_kbd.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/linux/SDL_udev.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/linux/SDL_dbus.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/linux/SDL_fcitx.c" />

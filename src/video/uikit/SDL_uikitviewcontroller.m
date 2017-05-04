@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -58,6 +58,7 @@ SDL_AppleTVControllerUIHintChanged(void *userdata, const char *name, const char 
 
 #if SDL_IPHONE_KEYBOARD
     UITextField *textField;
+    BOOL rotatingOrientation;
 #endif
 }
 
@@ -70,6 +71,7 @@ SDL_AppleTVControllerUIHintChanged(void *userdata, const char *name, const char 
 
 #if SDL_IPHONE_KEYBOARD
         [self initKeyboard];
+        rotatingOrientation = FALSE;
 #endif
 
 #if TARGET_OS_TV
@@ -211,6 +213,29 @@ SDL_AppleTVControllerUIHintChanged(void *userdata, const char *name, const char 
     }
 }
 
+/* willRotateToInterfaceOrientation and didRotateFromInterfaceOrientation are deprecated in iOS 8+ in favor of viewWillTransitionToSize */
+#if TARGET_OS_TV || __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    rotatingOrientation = TRUE;
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext> context) {}
+                                 completion:^(id<UIViewControllerTransitionCoordinatorContext> context) {
+                                     rotatingOrientation = FALSE;
+                                 }];
+}
+#else
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+    rotatingOrientation = TRUE;
+}
+
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+    rotatingOrientation = FALSE;
+}
+#endif /* TARGET_OS_TV || __IPHONE_OS_VERSION_MIN_REQUIRED >= 80000 */
+
 - (void)deinitKeyboard
 {
 #if !TARGET_OS_TV
@@ -251,7 +276,8 @@ SDL_AppleTVControllerUIHintChanged(void *userdata, const char *name, const char 
 
 - (void)keyboardWillHide:(NSNotification *)notification
 {
-    SDL_StopTextInput();
+    if (!rotatingOrientation)
+        SDL_StopTextInput();
     [self setKeyboardHeight:0];
 }
 

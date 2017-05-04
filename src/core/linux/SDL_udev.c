@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -33,7 +33,14 @@
 
 #include "SDL.h"
 
-static const char* SDL_UDEV_LIBS[] = { "libudev.so.1", "libudev.so.0" };
+static const char *SDL_UDEV_LIBS[] = {
+#ifdef SDL_UDEV_DYNAMIC
+	SDL_UDEV_DYNAMIC
+#else
+	"libudev.so.1",
+	"libudev.so.0"
+#endif
+};
 
 #define _THIS SDL_UDEV_PrivateData *_this
 static _THIS = NULL;
@@ -209,7 +216,7 @@ SDL_UDEV_Scan(void)
     enumerate = _this->udev_enumerate_new(_this->udev);
     if (enumerate == NULL) {
         SDL_UDEV_Quit();
-        SDL_SetError("udev_monitor_new_from_netlink() failed");
+        SDL_SetError("udev_enumerate_new() failed");
         return;
     }
     
@@ -252,8 +259,12 @@ SDL_UDEV_LoadLibrary(void)
     if (_this == NULL) {
         return SDL_SetError("UDEV not initialized");
     }
-    
-   
+ 
+    /* See if there is a udev library already loaded */
+    if (SDL_UDEV_load_syms() == 0) {
+        return 0;
+    }
+
     if (_this->udev_handle == NULL) {
         for( i = 0 ; i < SDL_arraysize(SDL_UDEV_LIBS); i++) {
             _this->udev_handle = SDL_LoadObject(SDL_UDEV_LIBS[i]);
@@ -536,3 +547,5 @@ SDL_UDEV_DelCallback(SDL_UDEV_Callback cb)
 
 
 #endif /* SDL_USE_LIBUDEV */
+
+/* vi: set ts=4 sw=4 expandtab: */

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -431,7 +431,7 @@ typedef struct SDL_MultiGestureEvent
 {
     Uint32 type;        /**< ::SDL_MULTIGESTURE */
     Uint32 timestamp;
-    SDL_TouchID touchId; /**< The touch device index */
+    SDL_TouchID touchId; /**< The touch device id */
     float dTheta;
     float dDist;
     float x;

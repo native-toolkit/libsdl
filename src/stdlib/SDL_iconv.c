@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -38,6 +38,7 @@
    If we get this wrong, it's just a warning, so no big deal.
 */
 #if defined(_XGP6) || defined(__APPLE__) || \
+    defined(__EMSCRIPTEN__) || \
     (defined(__GLIBC__) && ((__GLIBC__ > 2) || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 2)) || \
     (defined(_NEWLIB_VERSION)))
 #define ICONV_INBUF_NONCONST

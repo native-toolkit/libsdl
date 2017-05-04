@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -83,6 +83,10 @@ typedef struct
     Uint32 buttonstate;
     SDL_bool relative_mode;
     SDL_bool relative_mode_warp;
+    float normal_speed_scale;
+    float relative_speed_scale;
+    float scale_accum_x;
+    float scale_accum_y;
 
     /* Data for double-click tracking */
     int num_clickstates;

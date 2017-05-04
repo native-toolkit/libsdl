@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -646,7 +646,7 @@ Cocoa_SetTextInputRect(_THIS, SDL_Rect *rect)
 void
 Cocoa_HandleKeyEvent(_THIS, NSEvent *event)
 {
-    SDL_VideoData *data = (SDL_VideoData *) _this->driverdata;
+    SDL_VideoData *data = _this ? ((SDL_VideoData *) _this->driverdata) : NULL;
     if (!data) {
         return;  /* can happen when returning from fullscreen Space on shutdown */
     }

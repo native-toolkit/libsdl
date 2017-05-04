@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2016 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -297,7 +297,7 @@ static int GLES2_LoadFunctions(GLES2_DriverContext * data)
     do { \
         data->func = SDL_GL_GetProcAddress(#func); \
         if ( ! data->func ) { \
-            return SDL_SetError("Couldn't load GLES2 function %s: %s\n", #func, SDL_GetError()); \
+            return SDL_SetError("Couldn't load GLES2 function %s: %s", #func, SDL_GetError()); \
         } \
     } while ( 0 );
 #endif /* __SDL_NOGETPROCADDR__ */
@@ -1068,7 +1068,7 @@ GLES2_CacheShader(SDL_Renderer *renderer, GLES2_ShaderType type, SDL_BlendMode b
     /* Compile or load the selected shader instance */
     entry->id = data->glCreateShader(instance->type);
     if (instance->format == (GLenum)-1) {
-        data->glShaderSource(entry->id, 1, (const char **)&instance->data, NULL);
+        data->glShaderSource(entry->id, 1, (const char **)(char *)&instance->data, NULL);
         data->glCompileShader(entry->id);
         data->glGetShaderiv(entry->id, GL_COMPILE_STATUS, &compileSuccessful);
     } else {
