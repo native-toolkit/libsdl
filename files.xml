@@ -3,7 +3,8 @@
     <section unless="SDL_CONFIG_PATH" >
        <set name="SDL_CONFIG_PATH" value="${NATIVE_TOOLKIT_PATH}/sdl/include/configs/default/" unless="windows || mac || linux || rpi" />
        <set name="SDL_CONFIG_PATH" value="${NATIVE_TOOLKIT_PATH}/sdl/include/configs/linux/" if="linux" unless="rpi"/>
-       <set name="SDL_CONFIG_PATH" value="${NATIVE_TOOLKIT_PATH}/sdl/include/configs/windows/" if="windows" />
+       <set name="SDL_CONFIG_PATH" value="${NATIVE_TOOLKIT_PATH}/sdl/include/configs/windows/" if="windows" unless="winrt" />
+       <set name="SDL_CONFIG_PATH" value="${NATIVE_TOOLKIT_PATH}/sdl/include/configs/winrt/" if="winrt" />
        <set name="SDL_CONFIG_PATH" value="${NATIVE_TOOLKIT_PATH}/sdl/include/configs/mac/" if="mac" />
        <set name="SDL_CONFIG_PATH" value="${NATIVE_TOOLKIT_PATH}/sdl/include/configs/rpi/" if="rpi" />
     </section>
@@ -75,7 +76,7 @@
         <depend name="${NATIVE_TOOLKIT_PATH}/sdl/include/SDL_config_minimal.h"/>
         <depend name="${NATIVE_TOOLKIT_PATH}/sdl/include/SDL_config_pandora.h"/>
         <depend name="${NATIVE_TOOLKIT_PATH}/sdl/include/SDL_config_psp.h"/>
-        <depend name="${NATIVE_TOOLKIT_PATH}/sdl/include/SDL_config_windows.h"/>
+        <depend name="${NATIVE_TOOLKIT_PATH}/sdl/include/SDL_config_windows.h" unless="winrt"/>
         <depend name="${NATIVE_TOOLKIT_PATH}/sdl/include/SDL_assert.h"/>
         <depend name="${NATIVE_TOOLKIT_PATH}/sdl/include/SDL_atomic.h"/>
         <depend name="${NATIVE_TOOLKIT_PATH}/sdl/include/SDL_audio.h"/>
@@ -106,6 +107,7 @@
             <compilerflag value="-DUSING_GENERATED_CONFIG_H" />
             <compilerflag value="-DNATIVE_TOOLKIT_SDL_ANGLE" if="NATIVE_TOOLKIT_SDL_ANGLE" />
             <compilerflag value="-DNATIVE_TOOLKIT_STATIC_ANGLE" if="NATIVE_TOOLKIT_STATIC_ANGLE" />
+            <compilerflag value="-D__WINRT__" if="winrt" />
 
         </section>
 
