@@ -133,11 +133,14 @@
             <compilerflag value="-DUSING_GENERATED_CONFIG_H" />
             <compilerflag value="-DNATIVE_TOOLKIT_SDL_ANGLE" if="NATIVE_TOOLKIT_SDL_ANGLE" />
             <compilerflag value="-DNATIVE_TOOLKIT_STATIC_ANGLE" if="NATIVE_TOOLKIT_STATIC_ANGLE" />
-            <compilerflag value="-D__WINRT__" if="winrt" />
-            <compilerflag value="-DUNICODE" if="winrt" />
-            <compilerflag value="-DSDL_BUILDING_WINRT=1" if="winrt" />
 
+        </section>
 
+        <section if="winrt">
+
+            <compilerflag value="-D__WINRT__"/>
+            <compilerflag value="-DUNICODE"/>
+            <compilerflag value="-DSDL_BUILDING_WINRT=1"/>
 
         </section>
 
@@ -422,11 +425,10 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/directsound/SDL_directsound.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/winmm/SDL_winmm.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/xaudio2/SDL_xaudio2.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/xaudio2/SDL_xaudio2_winrthelpers.cpp" if="winrt"/>
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/windows/SDL_windows.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/windows/SDL_xinput.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/filesystem/windows/SDL_sysfilesystem.c" unless="winrt"/>
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/filesystem/winrt/SDL_sysfilesystem.cpp" if="winrt"/>
+
+
             <!-- <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/windows/SDL_dxjoystick.c" /> removed in 2.0.4?-->
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/windows/SDL_mmjoystick.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/windows/SDL_dinputjoystick.c" />
@@ -439,15 +441,18 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/haptic/windows/SDL_windowshaptic.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/haptic/windows/SDL_xinputhaptic.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/loadso/windows/SDL_sysloadso.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/power/windows/SDL_syspower.c" unless="winrt"/>
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/power/winrt/SDL_syspower.cpp" if="winrt"/>
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/thread/windows/SDL_sysmutex.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/thread/windows/SDL_syssem.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/thread/windows/SDL_systhread.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/thread/windows/SDL_systls.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/timer/windows/SDL_systimer.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/SDL_d3dmath.c" />            
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/direct3d11/SDL_render_d3d11.c" />
 
             <section unless="winrt">
+
+                <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/filesystem/windows/SDL_sysfilesystem.c" />
+                <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/power/windows/SDL_syspower.c" />
                 <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/windows/SDL_windowsclipboard.c" />
                 <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/windows/SDL_windowsevents.c" />
                 <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/windows/SDL_windowsframebuffer.c" />
@@ -460,22 +465,20 @@
                 <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/windows/SDL_windowsshape.c" />
                 <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/windows/SDL_windowsvideo.c" />
                 <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/windows/SDL_windowswindow.c" />
-            </section>
+                <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/direct3d/SDL_render_d3d.c" unless="winrt"/>
 
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/SDL_d3dmath.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/direct3d/SDL_render_d3d.c" unless="winrt"/>
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/direct3d11/SDL_render_d3d11.c" />
+            </section>
 
         </section>
 
         <section if="winrt">
 
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/xaudio2/SDL_xaudio2_winrthelpers.cpp" if="winrt"/>
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/filesystem/winrt/SDL_sysfilesystem.cpp" if="winrt"/>
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/power/winrt/SDL_syspower.cpp" if="winrt"/>
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/winrt/SDL_winrtapp_common.cpp" />
-
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/winrt/SDL_winrtapp_direct3d.cpp" />
-
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/winrt/SDL_winrtapp_xaml.cpp" />
-
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/direct3d11/SDL_render_winrt.cpp" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/winrt/SDL_winrtevents.cpp" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/winrt/SDL_winrtkeyboard.cpp" />
@@ -485,6 +488,7 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/winrt/SDL_winrtpointerinput.cpp" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/winrt/SDL_winrtvideo.cpp" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/winrt/SDL_winrtgamebar.cpp" />
+
         </section>
 
         <section if="mac">
