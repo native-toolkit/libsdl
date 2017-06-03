@@ -384,8 +384,8 @@ void SDL_WinRTApp::SetWindow(CoreWindow^ window)
         ref new TypedEventHandler<CoreWindow^, CharacterReceivedEventArgs^>(this, &SDL_WinRTApp::OnCharacterReceived);
 
 #if NTDDI_VERSION >= NTDDI_WIN10
-    Windows::UI::Core::SystemNavigationManager::GetForCurrentView()->BackRequested +=
-        ref new EventHandler<BackRequestedEventArgs^>(this, &SDL_WinRTApp::OnBackButtonPressed);
+//    Windows::UI::Core::SystemNavigationManager::GetForCurrentView()->BackRequested +=
+//        ref new EventHandler<BackRequestedEventArgs^>(this, &SDL_WinRTApp::OnBackButtonPressed);
 #elif WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP
     HardwareButtons::BackPressed +=
         ref new EventHandler<BackPressedEventArgs^>(this, &SDL_WinRTApp::OnBackButtonPressed);

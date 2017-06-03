@@ -164,7 +164,7 @@ typedef unsigned int uintptr_t;
 #define HAVE__FSEEKI64 1
 
 /* Enable various audio drivers */
-#define SDL_AUDIO_DRIVER_XAUDIO2	1 /*0 SWT*/
+#define SDL_AUDIO_DRIVER_XAUDIO2	1
 #define SDL_AUDIO_DRIVER_DISK	1
 #define SDL_AUDIO_DRIVER_DUMMY	1
 
@@ -200,7 +200,7 @@ typedef unsigned int uintptr_t;
 #define SDL_VIDEO_OPENGL_EGL 1
 
 /* Enable appropriate renderer(s) */
-#define SDL_VIDEO_RENDER_D3D11  1 /*0?*/
+#define SDL_VIDEO_RENDER_D3D11  1
 
 #if SDL_VIDEO_OPENGL_ES2
 #define SDL_VIDEO_RENDER_OGL_ES2 1
