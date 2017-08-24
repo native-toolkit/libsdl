@@ -82,6 +82,8 @@ if (!_this->egl_data->NAME) \
 { \
     return SDL_SetError("Could not retrieve EGL function " #NAME); \
 }
+#endif
+
 static const char * SDL_EGL_GetErrorName(EGLint eglErrorCode)
 {
 #define SDL_EGL_ERROR_TRANSLATE(e) case e: return #e;
