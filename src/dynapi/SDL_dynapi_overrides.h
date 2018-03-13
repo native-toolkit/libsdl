@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -624,3 +624,49 @@
 #define SDL_MemoryBarrierReleaseFunction SDL_MemoryBarrierReleaseFunction_REAL
 #define SDL_MemoryBarrierAcquireFunction SDL_MemoryBarrierAcquireFunction_REAL
 #define SDL_JoystickGetDeviceInstanceID SDL_JoystickGetDeviceInstanceID_REAL
+#define SDL_utf8strlen SDL_utf8strlen_REAL
+#define SDL_LoadFile_RW SDL_LoadFile_RW_REAL
+#define SDL_wcscmp SDL_wcscmp_REAL
+#define SDL_ComposeCustomBlendMode SDL_ComposeCustomBlendMode_REAL
+#define SDL_DuplicateSurface SDL_DuplicateSurface_REAL
+#define SDL_Vulkan_LoadLibrary SDL_Vulkan_LoadLibrary_REAL
+#define SDL_Vulkan_GetVkGetInstanceProcAddr SDL_Vulkan_GetVkGetInstanceProcAddr_REAL
+#define SDL_Vulkan_UnloadLibrary SDL_Vulkan_UnloadLibrary_REAL
+#define SDL_Vulkan_GetInstanceExtensions SDL_Vulkan_GetInstanceExtensions_REAL
+#define SDL_Vulkan_CreateSurface SDL_Vulkan_CreateSurface_REAL
+#define SDL_Vulkan_GetDrawableSize SDL_Vulkan_GetDrawableSize_REAL
+#define SDL_LockJoysticks SDL_LockJoysticks_REAL
+#define SDL_UnlockJoysticks SDL_UnlockJoysticks_REAL
+#define SDL_GetMemoryFunctions SDL_GetMemoryFunctions_REAL
+#define SDL_SetMemoryFunctions SDL_SetMemoryFunctions_REAL
+#define SDL_GetNumAllocations SDL_GetNumAllocations_REAL
+#define SDL_NewAudioStream SDL_NewAudioStream_REAL
+#define SDL_AudioStreamPut SDL_AudioStreamPut_REAL
+#define SDL_AudioStreamGet SDL_AudioStreamGet_REAL
+#define SDL_AudioStreamClear SDL_AudioStreamClear_REAL
+#define SDL_AudioStreamAvailable SDL_AudioStreamAvailable_REAL
+#define SDL_FreeAudioStream SDL_FreeAudioStream_REAL
+#define SDL_AudioStreamFlush SDL_AudioStreamFlush_REAL
+#define SDL_acosf SDL_acosf_REAL
+#define SDL_asinf SDL_asinf_REAL
+#define SDL_atanf SDL_atanf_REAL
+#define SDL_atan2f SDL_atan2f_REAL
+#define SDL_ceilf SDL_ceilf_REAL
+#define SDL_copysignf SDL_copysignf_REAL
+#define SDL_fabsf SDL_fabsf_REAL
+#define SDL_floorf SDL_floorf_REAL
+#define SDL_logf SDL_logf_REAL
+#define SDL_powf SDL_powf_REAL
+#define SDL_scalbnf SDL_scalbnf_REAL
+#define SDL_fmod SDL_fmod_REAL
+#define SDL_fmodf SDL_fmodf_REAL
+#define SDL_SetYUVConversionMode SDL_SetYUVConversionMode_REAL
+#define SDL_GetYUVConversionMode SDL_GetYUVConversionMode_REAL
+#define SDL_GetYUVConversionModeForResolution SDL_GetYUVConversionModeForResolution_REAL
+#define SDL_RenderGetMetalLayer SDL_RenderGetMetalLayer_REAL
+#define SDL_RenderGetMetalCommandEncoder SDL_RenderGetMetalCommandEncoder_REAL
+#define SDL_IsAndroidTV SDL_IsAndroidTV_REAL
+#define SDL_WinRTGetDeviceFamily SDL_WinRTGetDeviceFamily_REAL
+#define SDL_log10 SDL_log10_REAL
+#define SDL_log10f SDL_log10f_REAL
+#define SDL_GameControllerMappingForDeviceIndex SDL_GameControllerMappingForDeviceIndex_REAL

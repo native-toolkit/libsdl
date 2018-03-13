@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -28,11 +28,6 @@
 #include "SDL_DirectFB_window.h"
 
 #include "../SDL_shape_internals.h"
-
-SDL_Window*
-DirectFB_CreateShapedWindow(const char *title,unsigned int x,unsigned int y,unsigned int w,unsigned int h,Uint32 flags) {
-    return SDL_CreateWindow(title,x,y,w,h,flags /* | SDL_DFB_WINDOW_SHAPED */);
-}
 
 SDL_WindowShaper*
 DirectFB_CreateShaper(SDL_Window* window) {

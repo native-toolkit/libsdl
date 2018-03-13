@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -49,6 +49,8 @@ SDL_LookupString(const char *key)
 
 /* Public functions */
 
+static char *SDL_GetErrorMsg(char *errstr, int maxlen);
+
 int
 SDL_SetError(SDL_PRINTF_FORMAT_STRING const char *fmt, ...)
 {
@@ -73,6 +75,16 @@ SDL_SetError(SDL_PRINTF_FORMAT_STRING const char *fmt, ...)
             switch (*fmt++) {
             case 0:            /* Malformed format string.. */
                 --fmt;
+                break;
+            case 'l':
+                switch (*fmt++) {
+                case 0:        /* Malformed format string.. */
+                    --fmt;
+                    break;
+                case 'i': case 'd': case 'u':
+                    error->args[error->argc++].value_l = va_arg(ap, long);
+                    break;
+                }
                 break;
             case 'c':
             case 'i':
@@ -110,13 +122,18 @@ SDL_SetError(SDL_PRINTF_FORMAT_STRING const char *fmt, ...)
     }
     va_end(ap);
 
-    /* If we are in debug mode, print out an error message */
-    SDL_LogDebug(SDL_LOG_CATEGORY_ERROR, "%s", SDL_GetError());
-
+    if (SDL_LogGetPriority(SDL_LOG_CATEGORY_ERROR) <= SDL_LOG_PRIORITY_DEBUG) {
+        /* If we are in debug mode, print out an error message
+         * Avoid stomping on the static buffer in GetError, just
+         * in case this is called while processing a ShowMessageBox to
+         * show an error already in that static buffer.
+         */
+        char errmsg[SDL_ERRBUFIZE];
+        SDL_GetErrorMsg(errmsg, sizeof(errmsg));
+        SDL_LogDebug(SDL_LOG_CATEGORY_ERROR, "%s", errmsg);
+    }
     return -1;
 }
-
-static char *SDL_GetErrorMsg(char *errstr, int maxlen);
 
 /* Available for backwards compatibility */
 const char *
@@ -211,6 +228,22 @@ SDL_GetErrorMsg(char *errstr, int maxlen)
                 while ((*fmt == '.' || (*fmt >= '0' && *fmt <= '9'))
                        && spot < (tmp + SDL_arraysize(tmp) - 2)) {
                     *spot++ = *fmt++;
+                }
+                if (*fmt == 'l') {
+                    *spot++ = *fmt++;
+                    *spot++ = *fmt++;
+                    *spot++ = '\0';
+                    switch (spot[-2]) {
+                    case 'i': case 'd': case 'u':
+                      len = SDL_snprintf(msg, maxlen, tmp,
+                                         error->args[argi++].value_l);
+                      if (len > 0) {
+                          msg += len;
+                          maxlen -= len;
+                      }
+                      break;
+                    }
+                    continue;
                 }
                 *spot++ = *fmt++;
                 *spot++ = '\0';

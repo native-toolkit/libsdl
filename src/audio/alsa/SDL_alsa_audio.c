@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -26,7 +26,6 @@
 
 #include <sys/types.h>
 #include <signal.h>             /* For kill() */
-#include <errno.h>
 #include <string.h>
 
 #include "SDL_assert.h"
@@ -331,20 +330,7 @@ ALSA_PlayDevice(_THIS)
     this->hidden->swizzle_func(this, this->hidden->mixbuf, frames_left);
 
     while ( frames_left > 0 && SDL_AtomicGet(&this->enabled) ) {
-        int status;
-
-        /* This wait is a work-around for a hang when USB devices are
-           unplugged.  Normally it should not result in any waiting,
-           but in the case of a USB unplug, it serves as a way to
-           join the playback thread after the timeout occurs */
-        status = ALSA_snd_pcm_wait(this->hidden->pcm_handle, 1000);
-        if (status == 0) {
-            /*fprintf(stderr, "ALSA timeout waiting for available buffer space\n");*/
-            SDL_OpenedAudioDeviceDisconnected(this);
-            return;
-        }
-
-        status = ALSA_snd_pcm_writei(this->hidden->pcm_handle,
+        int status = ALSA_snd_pcm_writei(this->hidden->pcm_handle,
                                          sample_buf, frames_left);
 
         if (status < 0) {

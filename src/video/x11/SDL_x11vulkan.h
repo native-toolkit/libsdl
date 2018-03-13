@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -20,32 +20,29 @@
 */
 #include "../../SDL_internal.h"
 
-#ifndef _SDL_bsdaudio_h
-#define _SDL_bsdaudio_h
+#ifndef SDL_x11vulkan_h_
+#define SDL_x11vulkan_h_
 
-#include "../SDL_sysaudio.h"
+#include "../SDL_vulkan_internal.h"
 
-#define _THIS   SDL_AudioDevice *this
+#if SDL_VIDEO_VULKAN && SDL_VIDEO_DRIVER_X11
 
-struct SDL_PrivateAudioData
-{
-    /* The file descriptor for the audio device */
-    int audio_fd;
+/*typedef struct xcb_connection_t xcb_connection_t;*/
+typedef xcb_connection_t *(*PFN_XGetXCBConnection)(Display *dpy);
 
-    /* The parent process id, to detect when application quits */
-    pid_t parent;
+int X11_Vulkan_LoadLibrary(_THIS, const char *path);
+void X11_Vulkan_UnloadLibrary(_THIS);
+SDL_bool X11_Vulkan_GetInstanceExtensions(_THIS,
+                                          SDL_Window *window,
+                                          unsigned *count,
+                                          const char **names);
+SDL_bool X11_Vulkan_CreateSurface(_THIS,
+                                  SDL_Window *window,
+                                  VkInstance instance,
+                                  VkSurfaceKHR *surface);
 
-    /* Raw mixing buffer */
-    Uint8 *mixbuf;
-    int mixlen;
+#endif
 
-    /* Support for audio timing using a timer, in addition to select() */
-    float frame_ticks;
-    float next_frame;
-};
-
-#define FUDGE_TICKS 10      /* The scheduler overhead ticks per frame */
-
-#endif /* _SDL_bsdaudio_h */
+#endif /* SDL_x11vulkan_h_ */
 
 /* vi: set ts=4 sw=4 expandtab: */

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -35,7 +35,7 @@ Wayland_GLES_LoadLibrary(_THIS, const char *path) {
     int ret;
     SDL_VideoData *data = (SDL_VideoData *) _this->driverdata;
     
-    ret = SDL_EGL_LoadLibrary(_this, path, (NativeDisplayType) data->display);
+    ret = SDL_EGL_LoadLibrary(_this, path, (NativeDisplayType) data->display, 0);
 
     Wayland_PumpEvents(_this);
     WAYLAND_wl_display_flush(data->display);

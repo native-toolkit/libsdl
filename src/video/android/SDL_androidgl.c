@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -54,7 +54,7 @@ Android_GLES_SwapWindow(_THIS, SDL_Window * window)
 
 int
 Android_GLES_LoadLibrary(_THIS, const char *path) {
-    return SDL_EGL_LoadLibrary(_this, path, (NativeDisplayType) 0);
+    return SDL_EGL_LoadLibrary(_this, path, (NativeDisplayType) 0, 0);
 }
 
 #endif /* SDL_VIDEO_DRIVER_ANDROID */
