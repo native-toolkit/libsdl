@@ -203,7 +203,9 @@
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/SDL_gamecontroller.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/SDL_joystick.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/libm/e_atan2.c" />
+        <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/libm/e_fmod.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/libm/e_log.c" />
+        <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/libm/e_log10.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/libm/e_pow.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/libm/e_rem_pio2.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/libm/e_sqrt.c" />
@@ -214,11 +216,11 @@
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/libm/s_atan.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/libm/s_copysign.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/libm/s_cos.c" />
-        <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/libm/s_tan.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/libm/s_fabs.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/libm/s_floor.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/libm/s_scalbn.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/libm/s_sin.c" />
+        <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/libm/s_tan.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/power/SDL_power.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/SDL_render.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/SDL_yuv_sw.c" />
