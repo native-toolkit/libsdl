@@ -495,10 +495,12 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/cocoa/SDL_cocoaevents.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/cocoa/SDL_cocoakeyboard.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/cocoa/SDL_cocoamessagebox.m" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/cocoa/SDL_cocoametalview.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/cocoa/SDL_cocoamodes.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/cocoa/SDL_cocoamouse.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/cocoa/SDL_cocoamousetap.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/cocoa/SDL_cocoaopengl.m" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/cocoa/SDL_cocoaopengles.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/cocoa/SDL_cocoashape.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/cocoa/SDL_cocoavideo.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/cocoa/SDL_cocoavulkan.m" />
