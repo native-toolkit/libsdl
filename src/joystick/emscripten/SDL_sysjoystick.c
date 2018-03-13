@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -28,7 +28,6 @@
 #include "SDL_events.h"
 
 #include "SDL_joystick.h"
-#include "SDL_hints.h"
 #include "SDL_assert.h"
 #include "SDL_timer.h"
 #include "SDL_log.h"
@@ -42,7 +41,7 @@ static SDL_joylist_item *SDL_joylist_tail = NULL;
 static int numjoysticks = 0;
 static int instance_counter = 0;
 
-EM_BOOL
+static EM_BOOL
 Emscripten_JoyStickConnected(int eventType, const EmscriptenGamepadEvent *gamepadEvent, void *userData)
 {
     int i;
@@ -111,7 +110,7 @@ Emscripten_JoyStickConnected(int eventType, const EmscriptenGamepadEvent *gamepa
     return 1;
 }
 
-EM_BOOL
+static EM_BOOL
 Emscripten_JoyStickDisconnected(int eventType, const EmscriptenGamepadEvent *gamepadEvent, void *userData)
 {
     SDL_joylist_item *item = SDL_joylist;

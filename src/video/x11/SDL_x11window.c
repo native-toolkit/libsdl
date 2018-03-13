@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -40,7 +40,6 @@
 
 #include "SDL_timer.h"
 #include "SDL_syswm.h"
-#include "SDL_assert.h"
 #include "SDL_log.h"
 
 #define _NET_WM_STATE_REMOVE    0l
@@ -226,6 +225,19 @@ X11_GetNetWMState(_THIS, Window xwindow)
         if (fullscreen == 1) {
             flags |= SDL_WINDOW_FULLSCREEN;
         }
+
+        /* If the window is unmapped, numItems will be zero and _NET_WM_STATE_HIDDEN
+         * will not be set. Do an additional check to see if the window is unmapped
+         * and mark it as SDL_WINDOW_HIDDEN if it is.
+         */
+        {
+            XWindowAttributes attr;
+            SDL_memset(&attr,0,sizeof(attr));
+            X11_XGetWindowAttributes(videodata->display, xwindow, &attr);
+            if (attr.map_state == IsUnmapped) {
+                flags |= SDL_WINDOW_HIDDEN;
+            }
+        }
         X11_XFree(propertyValue);
     }
 
@@ -376,7 +388,7 @@ X11_CreateWindow(_THIS, SDL_Window * window)
     Atom _NET_WM_WINDOW_TYPE;
     Atom wintype;
     const char *wintype_name = NULL;
-    int compositor = 1;
+    long compositor = 1;
     Atom _NET_WM_PID;
     Atom XdndAware, xdnd_version = 5;
     long fevent = 0;
@@ -567,11 +579,12 @@ X11_CreateWindow(_THIS, SDL_Window * window)
     wintype = X11_XInternAtom(display, wintype_name, False);
     X11_XChangeProperty(display, w, _NET_WM_WINDOW_TYPE, XA_ATOM, 32,
                     PropModeReplace, (unsigned char *)&wintype, 1);
-
-    _NET_WM_BYPASS_COMPOSITOR = X11_XInternAtom(display, "_NET_WM_BYPASS_COMPOSITOR", False);
-    X11_XChangeProperty(display, w, _NET_WM_BYPASS_COMPOSITOR, XA_CARDINAL, 32,
-                    PropModeReplace,
-                    (unsigned char *)&compositor, 1);
+    if (SDL_GetHintBoolean(SDL_HINT_VIDEO_X11_NET_WM_BYPASS_COMPOSITOR, SDL_TRUE)) {
+        _NET_WM_BYPASS_COMPOSITOR = X11_XInternAtom(display, "_NET_WM_BYPASS_COMPOSITOR", False);
+        X11_XChangeProperty(display, w, _NET_WM_BYPASS_COMPOSITOR, XA_CARDINAL, 32,
+                        PropModeReplace,
+                        (unsigned char *)&compositor, 1);
+    }
 
     {
         Atom protocols[3];
@@ -1029,7 +1042,8 @@ X11_ShowWindow(_THIS, SDL_Window * window)
         /* Blocking wait for "MapNotify" event.
          * We use X11_XIfEvent because pXWindowEvent takes a mask rather than a type,
          * and XCheckTypedWindowEvent doesn't block */
-        X11_XIfEvent(display, &event, &isMapNotify, (XPointer)&data->xwindow);
+        if(!(window->flags & SDL_WINDOW_FOREIGN))
+            X11_XIfEvent(display, &event, &isMapNotify, (XPointer)&data->xwindow);
         X11_XFlush(display);
     }
 
@@ -1051,7 +1065,8 @@ X11_HideWindow(_THIS, SDL_Window * window)
     if (X11_IsWindowMapped(_this, window)) {
         X11_XWithdrawWindow(display, data->xwindow, displaydata->screen);
         /* Blocking wait for "UnmapNotify" event */
-        X11_XIfEvent(display, &event, &isUnmapNotify, (XPointer)&data->xwindow);
+        if(!(window->flags & SDL_WINDOW_FOREIGN))
+            X11_XIfEvent(display, &event, &isUnmapNotify, (XPointer)&data->xwindow);
         X11_XFlush(display);
     }
 }
@@ -1485,12 +1500,13 @@ X11_SetWindowGrab(_THIS, SDL_Window * window, SDL_bool grabbed)
     if (oldstyle_fullscreen || grabbed) {
         /* Try to grab the mouse */
         if (!data->videodata->broken_pointer_grab) {
+            const unsigned int mask = ButtonPressMask | ButtonReleaseMask | PointerMotionMask | FocusChangeMask;
             int attempts;
             int result;
 
             /* Try for up to 5000ms (5s) to grab. If it still fails, stop trying. */
             for (attempts = 0; attempts < 100; attempts++) {
-                result = X11_XGrabPointer(display, data->xwindow, True, 0, GrabModeAsync,
+                result = X11_XGrabPointer(display, data->xwindow, True, mask, GrabModeAsync,
                                  GrabModeAsync, data->xwindow, None, CurrentTime);
                 if (result == GrabSuccess) {
                     break;

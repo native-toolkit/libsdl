@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -35,8 +35,15 @@ typedef struct SDL_EGL_VideoData
     EGLDisplay egl_display;
     EGLConfig egl_config;
     int egl_swapinterval;
+    int egl_surfacetype;
     
     EGLDisplay(EGLAPIENTRY *eglGetDisplay) (NativeDisplayType display);
+    EGLDisplay(EGLAPIENTRY *eglGetPlatformDisplay) (EGLenum platform,
+                                void *native_display,
+                                const EGLint *attrib_list);
+    EGLDisplay(EGLAPIENTRY *eglGetPlatformDisplayEXT) (EGLenum platform,
+                                void *native_display,
+                                const EGLint *attrib_list);
     EGLBoolean(EGLAPIENTRY *eglInitialize) (EGLDisplay dpy, EGLint * major,
                                 EGLint * minor);
     EGLBoolean(EGLAPIENTRY  *eglTerminate) (EGLDisplay dpy);
@@ -55,6 +62,9 @@ typedef struct SDL_EGL_VideoData
     
     EGLBoolean(EGLAPIENTRY *eglDestroyContext) (EGLDisplay dpy, EGLContext ctx);
     
+    EGLSurface(EGLAPIENTRY *eglCreatePbufferSurface)(EGLDisplay dpy, EGLConfig config,
+                                                     EGLint const* attrib_list);
+
     EGLSurface(EGLAPIENTRY *eglCreateWindowSurface) (EGLDisplay dpy,
                                          EGLConfig config,
                                          NativeWindowType window,
@@ -85,7 +95,10 @@ typedef struct SDL_EGL_VideoData
 
 /* OpenGLES functions */
 extern int SDL_EGL_GetAttribute(_THIS, SDL_GLattr attrib, int *value);
-extern int SDL_EGL_LoadLibrary(_THIS, const char *path, NativeDisplayType native_display);
+/* SDL_EGL_LoadLibrary can get a display for a specific platform (EGL_PLATFORM_*)
+ * or, if 0 is passed, let the implementation decide.
+ */
+extern int SDL_EGL_LoadLibrary(_THIS, const char *path, NativeDisplayType native_display, EGLenum platform);
 extern void *SDL_EGL_GetProcAddress(_THIS, const char *proc);
 extern void SDL_EGL_UnloadLibrary(_THIS);
 extern int SDL_EGL_ChooseConfig(_THIS);

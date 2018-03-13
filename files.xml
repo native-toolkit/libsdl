@@ -174,6 +174,7 @@
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/events/SDL_windowevents.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/file/SDL_rwops.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/haptic/SDL_haptic.c" />
+        <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/steam/SDL_steamcontroller.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/SDL_gamecontroller.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/SDL_joystick.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/libm/e_atan2.c" />
@@ -195,7 +196,6 @@
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/libm/s_sin.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/power/SDL_power.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/SDL_render.c" />
-        <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/SDL_yuv_mmx.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/SDL_yuv_sw.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/stdlib/SDL_getenv.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/stdlib/SDL_iconv.c" />
@@ -205,6 +205,7 @@
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/stdlib/SDL_string.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/thread/SDL_thread.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/timer/SDL_timer.c" />
+        <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/yuv2rgb/yuv_rgb.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/SDL_RLEaccel.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/SDL_blit.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/SDL_blit_0.c" />
@@ -223,6 +224,8 @@
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/SDL_stretch.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/SDL_surface.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/SDL_video.c" />
+        <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/SDL_vulkan_utils.c" />
+        <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/SDL_yuv.c" />
 
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/disk/SDL_diskaudio.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/loadso/dlopen/SDL_sysloadso.c" />
@@ -286,6 +289,7 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/wayland/SDL_waylandopengles.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/wayland/SDL_waylandtouch.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/wayland/SDL_waylandvideo.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/wayland/SDL_waylandvulkan.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/wayland/SDL_waylandwindow.c" />
 
         </section>
@@ -305,6 +309,7 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/mir/SDL_mirmouse.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/mir/SDL_miropengl.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/mir/SDL_mirvideo.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/mir/SDL_mirvulkan.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/mir/SDL_mirwindow.c" />
 
         </section>
@@ -342,7 +347,6 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/SDL_audiodev.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/alsa/SDL_alsa_audio.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/arts/SDL_artsaudio.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/bsd/SDL_bsdaudio.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/esd/SDL_esdaudio.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/fusionsound/SDL_fsaudio.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/nas/SDL_nasaudio.c" />
@@ -362,6 +366,7 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/linux/SDL_fcitx.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/linux/SDL_ibus.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/linux/SDL_ime.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/unix/SDL_poll.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/linux/SDL_sysjoystick.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/x11/SDL_x11clipboard.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/x11/SDL_x11dyn.c" />
@@ -376,6 +381,7 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/x11/SDL_x11shape.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/x11/SDL_x11touch.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/x11/SDL_x11video.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/x11/SDL_x11vulkan.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/x11/SDL_x11window.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/x11/SDL_x11xinput2.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/x11/edid-parse.c" />
@@ -389,7 +395,6 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/thread/generic/SDL_syscond.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/directsound/SDL_directsound.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/winmm/SDL_winmm.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/xaudio2/SDL_xaudio2.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/windows/SDL_windows.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/windows/SDL_xinput.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/filesystem/windows/SDL_sysfilesystem.c" />
@@ -422,6 +427,7 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/windows/SDL_windowsopengles.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/windows/SDL_windowsshape.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/windows/SDL_windowsvideo.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/windows/SDL_windowsvulkan.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/windows/SDL_windowswindow.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/SDL_d3dmath.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/direct3d/SDL_render_d3d.c" />
@@ -447,6 +453,7 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/cocoa/SDL_cocoaopengl.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/cocoa/SDL_cocoashape.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/cocoa/SDL_cocoavideo.m" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/cocoa/SDL_cocoavulkan.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/cocoa/SDL_cocoawindow.m" />
 
         </section>
@@ -463,6 +470,7 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/uikit/SDL_uikitclipboard.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/uikit/SDL_uikitevents.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/uikit/SDL_uikitmessagebox.m" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/uikit/SDL_uikitmetalview.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/uikit/SDL_uikitmodes.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/uikit/SDL_uikitopengles.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/uikit/SDL_uikitopenglview.m" />
@@ -479,6 +487,7 @@
 
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/android/SDL_androidaudio.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/android/SDL_android.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/haptic/android/SDL_syshaptic.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/android/SDL_sysjoystick.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/filesystem/android/SDL_sysfilesystem.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/main/android/SDL_android_main.c" if="NATIVE_TOOLKIT_SDL_STATIC" />
@@ -489,10 +498,10 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/android/SDL_androidkeyboard.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/android/SDL_androidtouch.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/android/SDL_androidvideo.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/android/SDL_androidvulkan.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/android/SDL_androidwindow.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/android/SDL_androidmessagebox.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/android/SDL_androidmouse.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/haptic/dummy/SDL_syshaptic.c" />
 
         </section>
 

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -45,7 +45,7 @@ extern "C" {
 #include "../../thread/SDL_systhread.h"
 
 /* Flag to tell whether or not the Be application is active or not */
-int SDL_BeAppActive = 0;
+static int SDL_BeAppActive = 0;
 static SDL_Thread *SDL_AppThread = NULL;
 
 static int

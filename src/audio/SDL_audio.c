@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -44,8 +44,8 @@ static const AudioBootStrap *const bootstrap[] = {
 #if SDL_AUDIO_DRIVER_SNDIO
     &SNDIO_bootstrap,
 #endif
-#if SDL_AUDIO_DRIVER_BSD
-    &BSD_AUDIO_bootstrap,
+#if SDL_AUDIO_DRIVER_NETBSD
+    &NETBSDAUDIO_bootstrap,
 #endif
 #if SDL_AUDIO_DRIVER_OSS
     &DSP_bootstrap,
@@ -70,9 +70,6 @@ static const AudioBootStrap *const bootstrap[] = {
 #endif
 #if SDL_AUDIO_DRIVER_WASAPI
     &WASAPI_bootstrap,
-#endif
-#if SDL_AUDIO_DRIVER_XAUDIO2
-    &XAUDIO2_bootstrap,
 #endif
 #if SDL_AUDIO_DRIVER_DSOUND
     &DSOUND_bootstrap,
@@ -100,6 +97,9 @@ static const AudioBootStrap *const bootstrap[] = {
 #endif
 #if SDL_AUDIO_DRIVER_EMSCRIPTEN
     &EMSCRIPTENAUDIO_bootstrap,
+#endif
+#if SDL_AUDIO_DRIVER_JACK
+    &JACK_bootstrap,
 #endif
 #if SDL_AUDIO_DRIVER_DISK
     &DISKAUDIO_bootstrap,
@@ -147,6 +147,7 @@ LoadLibSampleRate(void)
     SDL_assert(SRC_lib == NULL);
     SRC_lib = SDL_LoadObject(SDL_LIBSAMPLERATE_DYNAMIC);
     if (!SRC_lib) {
+        SDL_ClearError();
         return SDL_FALSE;
     }
 
@@ -226,6 +227,11 @@ SDL_AudioThreadInit_Default(_THIS)
 
 static void
 SDL_AudioThreadDeinit_Default(_THIS)
+{                               /* no-op. */
+}
+
+static void
+SDL_AudioBeginLoopIteration_Default(_THIS)
 {                               /* no-op. */
 }
 
@@ -349,6 +355,7 @@ finish_audio_entry_points_init(void)
     FILL_STUB(OpenDevice);
     FILL_STUB(ThreadInit);
     FILL_STUB(ThreadDeinit);
+    FILL_STUB(BeginLoopIteration);
     FILL_STUB(WaitDevice);
     FILL_STUB(PlayDevice);
     FILL_STUB(GetPendingBytes);
@@ -638,6 +645,7 @@ SDL_RunAudio(void *devicep)
     SDL_AudioDevice *device = (SDL_AudioDevice *) devicep;
     void *udata = device->callbackspec.userdata;
     SDL_AudioCallback callback = device->callbackspec.callback;
+    int data_len = 0;
     Uint8 *data;
 
     SDL_assert(!device->iscapture);
@@ -651,7 +659,8 @@ SDL_RunAudio(void *devicep)
 
     /* Loop, filling the audio buffers */
     while (!SDL_AtomicGet(&device->shutdown)) {
-        const int data_len = device->callbackspec.size;
+        current_audio.impl.BeginLoopIteration(device);
+        data_len = device->callbackspec.size;
 
         /* Fill the current buffer with sound */
         if (!device->stream && SDL_AtomicGet(&device->enabled)) {
@@ -723,6 +732,7 @@ SDL_RunAudio(void *devicep)
     return 0;
 }
 
+/* !!! FIXME: this needs to deal with device spec changes. */
 /* The general capture thread function */
 static int SDLCALL
 SDL_CaptureAudio(void *devicep)
@@ -732,7 +742,7 @@ SDL_CaptureAudio(void *devicep)
     const Uint32 delay = ((device->spec.samples * 1000) / device->spec.freq);
     const int data_len = device->spec.size;
     Uint8 *data;
-    void *udata = device->spec.userdata;
+    void *udata = device->callbackspec.userdata;
     SDL_AudioCallback callback = device->callbackspec.callback;
 
     SDL_assert(device->iscapture);
@@ -748,6 +758,8 @@ SDL_CaptureAudio(void *devicep)
     while (!SDL_AtomicGet(&device->shutdown)) {
         int still_need;
         Uint8 *ptr;
+
+        current_audio.impl.BeginLoopIteration(device);
 
         if (SDL_AtomicGet(&device->paused)) {
             SDL_Delay(delay);  /* just so we don't cook the CPU. */
@@ -869,8 +881,6 @@ SDL_GetAudioDriver(int index)
     return NULL;
 }
 
-extern void SDL_ChooseAudioConverters(void);
-
 int
 SDL_AudioInit(const char *driver_name)
 {
@@ -884,8 +894,6 @@ SDL_AudioInit(const char *driver_name)
 
     SDL_zero(current_audio);
     SDL_zero(open_devices);
-
-    SDL_ChooseAudioConverters();
 
     /* Select the proper audio driver */
     if (driver_name == NULL) {
@@ -1408,7 +1416,14 @@ SDL_OpenAudio(SDL_AudioSpec * desired, SDL_AudioSpec * obtained)
         id = open_audio_device(NULL, 0, desired, obtained,
                                SDL_AUDIO_ALLOW_ANY_CHANGE, 1);
     } else {
-        id = open_audio_device(NULL, 0, desired, NULL, 0, 1);
+        SDL_AudioSpec _obtained;
+        SDL_zero(_obtained);
+        id = open_audio_device(NULL, 0, desired, &_obtained, 0, 1);
+        /* On successful open, copy calculated values into 'desired'. */
+        if (id > 0) {
+            desired->size = _obtained.size;
+            desired->silence = _obtained.silence;
+        }
     }
 
     SDL_assert((id == 0) || (id == 1));
@@ -1535,6 +1550,8 @@ SDL_AudioQuit(void)
 #ifdef HAVE_LIBSAMPLERATE_H
     UnloadLibSampleRate();
 #endif
+
+    SDL_FreeResampleFilter();
 }
 
 #define NUM_FORMATS 10
