@@ -152,92 +152,11 @@
 #define HAVE_SYSCONF    1
 /* #undef HAVE_SYSCTLBYNAME */
 
-#define HAVE_MALLOC 1
-#define HAVE_CALLOC 1
-#define HAVE_REALLOC 1
-#define HAVE_FREE 1
-#define HAVE_ALLOCA 1
-#ifndef __WIN32__ /* Don't use C runtime versions of these on Windows */
-#define HAVE_GETENV 1
-#define HAVE_SETENV 1
-#define HAVE_PUTENV 1
-#define HAVE_UNSETENV 1
-#endif
-#define HAVE_QSORT 1
-#define HAVE_ABS 1
-#define HAVE_BCOPY 1
-#define HAVE_MEMSET 1
-#define HAVE_MEMCPY 1
-#define HAVE_MEMMOVE 1
-#define HAVE_MEMCMP 1
-#define HAVE_STRLEN 1
-/* #undef HAVE_STRLCPY */
-/* #undef HAVE_STRLCAT */
-#define HAVE_STRDUP 1
-/* #undef HAVE__STRREV */
-/* #undef HAVE__STRUPR */
-/* #undef HAVE__STRLWR */
-/* #undef HAVE_INDEX */
-/* #undef HAVE_RINDEX */
-#define HAVE_STRCHR 1
-#define HAVE_STRRCHR 1
-#define HAVE_STRSTR 1
-/* #undef HAVE_ITOA */
-/* #undef HAVE__LTOA */
-/* #undef HAVE__UITOA */
-/* #undef HAVE__ULTOA */
-#define HAVE_STRTOL 1
-#define HAVE_STRTOUL 1
-/* #undef HAVE__I64TOA */
-/* #undef HAVE__UI64TOA */
-#define HAVE_STRTOLL 1
-#define HAVE_STRTOULL 1
-#define HAVE_STRTOD 1
-#define HAVE_ATOI 1
-#define HAVE_ATOF 1
-#define HAVE_STRCMP 1
-#define HAVE_STRNCMP 1
-/* #undef HAVE__STRICMP */
-#define HAVE_STRCASECMP 1
-/* #undef HAVE__STRNICMP */
-#define HAVE_STRNCASECMP 1
-/* #undef HAVE_SSCANF */
-#define HAVE_VSSCANF 1
-/* #undef HAVE_SNPRINTF */
-#define HAVE_VSNPRINTF 1
-#define HAVE_M_PI /**/
-#define HAVE_ATAN 1
-#define HAVE_ATAN2 1
-#define HAVE_ACOS 1
-#define HAVE_ASIN 1
-#define HAVE_CEIL 1
-#define HAVE_COPYSIGN 1
-#define HAVE_COS 1
-#define HAVE_COSF 1
-#define HAVE_FABS 1
-#define HAVE_FLOOR 1
-#define HAVE_LOG 1
-#define HAVE_POW 1
-#define HAVE_SCALBN 1
-#define HAVE_SIN 1
-#define HAVE_SINF 1
-#define HAVE_SQRT 1
-#define HAVE_FSEEKO 1
-#define HAVE_FSEEKO64 1
-#define HAVE_SIGACTION 1
-#define HAVE_SA_SIGACTION 1
-#define HAVE_SETJMP 1
-#define HAVE_NANOSLEEP 1
-#define HAVE_SYSCONF 1
-/* #undef HAVE_SYSCTLBYNAME */
-#define HAVE_CLOCK_GETTIME 1
-/* #undef HAVE_GETPAGESIZE */
-#define HAVE_MPROTECT 1
-#define HAVE_ICONV 1
-#define HAVE_PTHREAD_SETNAME_NP 1
-/* #undef HAVE_PTHREAD_SET_NAME_NP */
-#define HAVE_SEM_TIMEDWAIT 1
-
+#else
+#define HAVE_STDARG_H 1
+#define HAVE_STDDEF_H 1
+#define HAVE_STDINT_H 1
+#endif /* HAVE_LIBC */
 
 /* SDL internal assertion support */
 /* #undef SDL_DEFAULT_ASSERT_LEVEL */
