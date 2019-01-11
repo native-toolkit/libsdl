@@ -110,6 +110,7 @@
         <depend files="native-toolkit-sdl-depends"/>
 
         <compilerflag value="-I${NATIVE_TOOLKIT_PATH}/sdl/include/" />
+        <compilerflag value="-I${NATIVE_TOOLKIT_PATH}/sdl/src/hidapi/hidapi/" />
         <compilerflag value="-I${SDL_CONFIG_PATH}" if="SDL_CONFIG_PATH" />
 
         <compilerflag value="-DGL_GLEXT_PROTOTYPES" if="android || rpi" />
@@ -203,11 +204,6 @@
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/events/SDL_windowevents.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/file/SDL_rwops.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/haptic/SDL_haptic.c" />
-        <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/hidapi/SDL_hidapi_ps4.c" />
-        <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/hidapi/SDL_hidapi_switch.c" />
-        <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/hidapi/SDL_hidapi_xbox360.c" />
-        <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/hidapi/SDL_hidapi_xboxone.c" />
-        <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/hidapi/SDL_hidapijoystick.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/steam/SDL_steamcontroller.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/SDL_gamecontroller.c" />
         <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/SDL_joystick.c" />
@@ -300,6 +296,16 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/opengles/SDL_render_gles.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/opengles2/SDL_render_gles2.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/render/opengles2/SDL_shaders_gles2.c" />
+
+        </section>
+
+        <section if="windows || mac || linux || ios || android || tvos">
+
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/hidapi/SDL_hidapi_ps4.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/hidapi/SDL_hidapi_switch.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/hidapi/SDL_hidapi_xbox360.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/hidapi/SDL_hidapi_xboxone.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/hidapi/SDL_hidapijoystick.c" />
 
         </section>
 
@@ -535,6 +541,7 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/filesystem/cocoa/SDL_sysfilesystem.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/iphoneos/SDL_sysjoystick.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/haptic/dummy/SDL_syshaptic.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/hidapi/ios/hid.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/power/uikit/SDL_syspower.m" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/sensor/coremotion/SDL_coremotionsensor.c" if="ios" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/uikit/SDL_uikitappdelegate.m" />
@@ -561,6 +568,7 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/haptic/android/SDL_syshaptic.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/android/SDL_sysjoystick.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/filesystem/android/SDL_sysfilesystem.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/hidapi/android/hid.cpp" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/main/android/SDL_android_main.c" if="NATIVE_TOOLKIT_SDL_STATIC" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/power/android/SDL_syspower.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/sensor/android/SDL_androidsensor.c" />
