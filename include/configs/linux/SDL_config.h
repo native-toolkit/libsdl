@@ -31,7 +31,7 @@
 
 /* Make sure that this isn't included by Visual C++ */
 #ifdef _MSC_VER
-#error You should run hg revert SDL_config.h 
+#error You should run hg revert SDL_config.h
 #endif
 
 /* C language features */
@@ -126,6 +126,8 @@
 #define HAVE_COPYSIGNF  1
 #define HAVE_COS    1
 #define HAVE_COSF   1
+#define HAVE_EXP    1
+#define HAVE_EXPF   1
 #define HAVE_FABS   1
 #define HAVE_FABSF  1
 #define HAVE_FLOOR  1
@@ -215,6 +217,7 @@
 /* #undef SDL_JOYSTICK_DUMMY */
 /* #undef SDL_JOYSTICK_IOKIT */
 #define SDL_JOYSTICK_LINUX 1
+#define SDL_JOYSTICK_HIDAPI 1
 /* #undef SDL_JOYSTICK_WINMM */
 /* #undef SDL_JOYSTICK_USBHID */
 /* #undef SDL_JOYSTICK_USBHID_MACHINE_JOYSTICK_H */
@@ -222,6 +225,9 @@
 #define SDL_HAPTIC_LINUX 1
 /* #undef SDL_HAPTIC_IOKIT */
 /* #undef SDL_HAPTIC_DINPUT */
+
+/* Enable the dummy sensor driver */
+#define SDL_SENSOR_DUMMY  1
 
 /* Enable various shared object loading systems */
 /* #undef SDL_LOADSO_HAIKU */

@@ -93,7 +93,6 @@ SDL_WinRTGetFSPathUNICODE(SDL_WinRT_Path pathType)
 extern "C" const char *
 SDL_WinRTGetFSPathUTF8(SDL_WinRT_Path pathType)
 {
-
     typedef unordered_map<SDL_WinRT_Path, string> UTF8PathMap;
     static UTF8PathMap utf8Paths;
 
@@ -111,8 +110,6 @@ SDL_WinRTGetFSPathUTF8(SDL_WinRT_Path pathType)
     utf8Paths[pathType] = utf8Path;
     SDL_free(utf8Path);
     return utf8Paths[pathType].c_str();
-
-return "";
 }
 
 extern "C" char *
