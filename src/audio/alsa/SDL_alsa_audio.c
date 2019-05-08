@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2019 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -788,7 +788,7 @@ ALSA_HotplugThread(void *arg)
         ALSA_Device *seen;
         ALSA_Device *prev;
 
-        if (ALSA_snd_device_name_hint(-1, "pcm", &hints) != -1) {
+        if (ALSA_snd_device_name_hint(-1, "pcm", &hints) == 0) {
             int i, j;
             const char *match = NULL;
             int bestmatch = 0xFFFF;

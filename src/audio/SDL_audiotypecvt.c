@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2019 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -26,7 +26,7 @@
 #include "SDL_assert.h"
 
 /* !!! FIXME: disabled until we fix https://bugzilla.libsdl.org/show_bug.cgi?id=4186 */
-#if 0 /*def __ARM_NEON__*/
+#if 0 /*def __ARM_NEON */
 #define HAVE_NEON_INTRINSICS 1
 #endif
 

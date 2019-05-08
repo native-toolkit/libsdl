@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2019 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -136,7 +136,11 @@ static void SDL_ExitProcess(int exitcode)
     emscripten_force_exit(exitcode);  /* this should "kill" the app. */
     exit(exitcode);
 #else
+#ifdef HAVE__EXIT /* Upper case _Exit() */
+    _Exit(exitcode);
+#else
     _exit(exitcode);
+#endif
 #endif
 }
 
@@ -178,6 +182,7 @@ SDL_PromptAssertion(const SDL_assert_data *data, void *userdata)
 
     (void) userdata;  /* unused in default handler. */
 
+    /* !!! FIXME: why is this using SDL_stack_alloc and not just "char message[SDL_MAX_LOG_MESSAGE];" ? */
     message = SDL_stack_alloc(char, SDL_MAX_LOG_MESSAGE);
     if (!message) {
         /* Uh oh, we're in real trouble now... */
@@ -249,7 +254,7 @@ SDL_PromptAssertion(const SDL_assert_data *data, void *userdata)
             SDL_bool okay = SDL_TRUE;
             char *buf = (char *) EM_ASM_INT({
                 var str =
-                    Pointer_stringify($0) + '\n\n' +
+                    UTF8ToString($0) + '\n\n' +
                     'Abort/Retry/Ignore/AlwaysIgnore? [ariA] :';
                 var reply = window.prompt(str, "i");
                 if (reply === null) {

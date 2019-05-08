@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2019 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -187,6 +187,7 @@ Cocoa_InitModes(_THIS)
     CGDisplayErr result;
     CGDirectDisplayID *displays;
     CGDisplayCount numDisplays;
+    SDL_bool isstack;
     int pass, i;
 
     result = CGGetOnlineDisplayList(0, NULL, &numDisplays);
@@ -194,11 +195,11 @@ Cocoa_InitModes(_THIS)
         CG_SetError("CGGetOnlineDisplayList()", result);
         return;
     }
-    displays = SDL_stack_alloc(CGDirectDisplayID, numDisplays);
+    displays = SDL_small_alloc(CGDirectDisplayID, numDisplays, &isstack);
     result = CGGetOnlineDisplayList(numDisplays, displays, &numDisplays);
     if (result != kCGErrorSuccess) {
         CG_SetError("CGGetOnlineDisplayList()", result);
-        SDL_stack_free(displays);
+        SDL_small_free(displays, isstack);
         return;
     }
 
@@ -260,7 +261,7 @@ Cocoa_InitModes(_THIS)
             SDL_free(display.name);
         }
     }
-    SDL_stack_free(displays);
+    SDL_small_free(displays, isstack);
 }}
 
 int

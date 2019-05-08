@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2019 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -494,18 +494,20 @@ WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         {
             SDL_Mouse *mouse = SDL_GetMouse();
             if (!mouse->relative_mode || mouse->relative_mode_warp) {
-                SDL_MouseID mouseID = (((GetMessageExtraInfo() & MOUSEEVENTF_FROMTOUCH) == MOUSEEVENTF_FROMTOUCH) ? SDL_TOUCH_MOUSEID : 0);
-                SDL_SendMouseMotion(data->window, mouseID, 0, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
-                if (isWin10FCUorNewer && mouseID != SDL_TOUCH_MOUSEID && mouse->relative_mode_warp) {
-                    /* To work around #3931, Win10 bug introduced in Fall Creators Update, where
-                       SetCursorPos() (SDL_WarpMouseInWindow()) doesn't reliably generate mouse events anymore,
-                       after each windows mouse event generate a fake event for the middle of the window
-                       if relative_mode_warp is used */
-                    int center_x = 0, center_y = 0;
-                    SDL_GetWindowSize(data->window, &center_x, &center_y);
-                    center_x /= 2;
-                    center_y /= 2;
-                    SDL_SendMouseMotion(data->window, mouseID, 0, center_x, center_y);
+                /* Only generate mouse events for real mouse */
+                if ((GetMessageExtraInfo() & MOUSEEVENTF_FROMTOUCH) != MOUSEEVENTF_FROMTOUCH) {
+                    SDL_SendMouseMotion(data->window, 0, 0, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam));
+                    if (isWin10FCUorNewer && mouse->relative_mode_warp) {
+                        /* To work around #3931, Win10 bug introduced in Fall Creators Update, where
+                           SetCursorPos() (SDL_WarpMouseInWindow()) doesn't reliably generate mouse events anymore,
+                           after each windows mouse event generate a fake event for the middle of the window
+                           if relative_mode_warp is used */
+                        int center_x = 0, center_y = 0;
+                        SDL_GetWindowSize(data->window, &center_x, &center_y);
+                        center_x /= 2;
+                        center_y /= 2;
+                        SDL_SendMouseMotion(data->window, 0, 0, center_x, center_y);
+                    }
                 }
             }
         }
@@ -525,8 +527,9 @@ WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         {
             SDL_Mouse *mouse = SDL_GetMouse();
             if (!mouse->relative_mode || mouse->relative_mode_warp) {
-                SDL_MouseID mouseID = (((GetMessageExtraInfo() & MOUSEEVENTF_FROMTOUCH) == MOUSEEVENTF_FROMTOUCH) ? SDL_TOUCH_MOUSEID : 0);
-                WIN_CheckWParamMouseButtons(wParam, data, mouseID);
+                if ((GetMessageExtraInfo() & MOUSEEVENTF_FROMTOUCH) != MOUSEEVENTF_FROMTOUCH) {
+                    WIN_CheckWParamMouseButtons(wParam, data, 0);
+                }
             }
         }
         break;
@@ -908,7 +911,8 @@ WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_TOUCH:
         if (data->videodata->GetTouchInputInfo && data->videodata->CloseTouchInputHandle) {
             UINT i, num_inputs = LOWORD(wParam);
-            PTOUCHINPUT inputs = SDL_stack_alloc(TOUCHINPUT, num_inputs);
+            SDL_bool isstack;
+            PTOUCHINPUT inputs = SDL_small_alloc(TOUCHINPUT, num_inputs, &isstack);
             if (data->videodata->GetTouchInputInfo((HTOUCHINPUT)lParam, num_inputs, inputs, sizeof(TOUCHINPUT))) {
                 RECT rect;
                 float x, y;
@@ -916,7 +920,7 @@ WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 if (!GetClientRect(hwnd, &rect) ||
                     (rect.right == rect.left && rect.bottom == rect.top)) {
                     if (inputs) {
-                        SDL_stack_free(inputs);
+                        SDL_small_free(inputs, isstack);
                     }
                     break;
                 }
@@ -931,7 +935,11 @@ WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                     PTOUCHINPUT input = &inputs[i];
 
                     const SDL_TouchID touchId = (SDL_TouchID)((size_t)input->hSource);
-                    if (SDL_AddTouch(touchId, "") < 0) {
+
+                    /* TODO: Can we use GetRawInputDeviceInfo and HID info to
+                       determine if this is a direct or indirect touch device?
+                     */
+                    if (SDL_AddTouch(touchId, SDL_TOUCH_DEVICE_DIRECT, "") < 0) {
                         continue;
                     }
 
@@ -950,7 +958,7 @@ WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                     }
                 }
             }
-            SDL_stack_free(inputs);
+            SDL_small_free(inputs, isstack);
 
             data->videodata->CloseTouchInputHandle((HTOUCHINPUT)lParam);
             return 0;
@@ -963,15 +971,16 @@ WIN_WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             HDROP drop = (HDROP) wParam;
             UINT count = DragQueryFile(drop, 0xFFFFFFFF, NULL, 0);
             for (i = 0; i < count; ++i) {
+                SDL_bool isstack;
                 UINT size = DragQueryFile(drop, i, NULL, 0) + 1;
-                LPTSTR buffer = SDL_stack_alloc(TCHAR, size);
+                LPTSTR buffer = SDL_small_alloc(TCHAR, size, &isstack);
                 if (buffer) {
                     if (DragQueryFile(drop, i, buffer, size)) {
                         char *file = WIN_StringToUTF8(buffer);
                         SDL_SendDropFile(data->window, file);
                         SDL_free(file);
                     }
-                    SDL_stack_free(buffer);
+                    SDL_small_free(buffer, isstack);
                 }
             }
             SDL_SendDropComplete(data->window);

@@ -301,6 +301,7 @@
 
         <section if="windows || mac || ios || android || tvos">
 
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/hidapi/SDL_hidapi_gamecube.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/hidapi/SDL_hidapi_ps4.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/hidapi/SDL_hidapi_switch.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/hidapi/SDL_hidapi_xbox360.c" />
@@ -343,19 +344,6 @@
 
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/pandora/SDL_pandora.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/pandora/SDL_pandora_events.c" />
-
-        </section>
-
-        <section if="LIBSDL_MIR">
-
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/mir/SDL_mirdyn.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/mir/SDL_mirevents.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/mir/SDL_mirframebuffer.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/mir/SDL_mirmouse.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/mir/SDL_miropengl.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/mir/SDL_mirvideo.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/mir/SDL_mirvulkan.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/mir/SDL_mirwindow.c" />
 
         </section>
 
@@ -413,6 +401,7 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/linux/SDL_fcitx.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/linux/SDL_ibus.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/linux/SDL_ime.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/linux/SDL_threadprio.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/unix/SDL_poll.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/linux/SDL_sysjoystick.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/video/x11/SDL_x11clipboard.c" />

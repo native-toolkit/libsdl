@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2019 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -63,9 +63,6 @@ static VideoBootStrap *bootstrap[] = {
 #endif
 #if SDL_VIDEO_DRIVER_X11
     &X11_bootstrap,
-#endif
-#if SDL_VIDEO_DRIVER_MIR
-    &MIR_bootstrap,
 #endif
 #if SDL_VIDEO_DRIVER_WAYLAND
     &Wayland_bootstrap,
@@ -1639,6 +1636,7 @@ SDL_RecreateWindow(SDL_Window * window, Uint32 flags)
         window->surface->flags &= ~SDL_DONTFREE;
         SDL_FreeSurface(window->surface);
         window->surface = NULL;
+        window->surface_valid = SDL_FALSE;
     }
     if (_this->DestroyWindowFramebuffer) {
         _this->DestroyWindowFramebuffer(_this, window);
@@ -2209,12 +2207,25 @@ SDL_MaximizeWindow(SDL_Window * window)
     }
 }
 
+static SDL_bool
+CanMinimizeWindow(SDL_Window * window)
+{
+    if (!_this->MinimizeWindow) {
+        return SDL_FALSE;
+    }
+    return SDL_TRUE;
+}
+
 void
 SDL_MinimizeWindow(SDL_Window * window)
 {
     CHECK_WINDOW_MAGIC(window,);
 
     if (window->flags & SDL_WINDOW_MINIMIZED) {
+        return;
+    }
+
+    if (!CanMinimizeWindow(window)) {
         return;
     }
 

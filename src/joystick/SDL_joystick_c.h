@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2019 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -65,6 +65,9 @@ extern SDL_bool SDL_IsJoystickXbox360(Uint16 vendor_id, Uint16 product_id);
 
 /* Function to return whether a joystick is an Xbox One controller */
 extern SDL_bool SDL_IsJoystickXboxOne(Uint16 vendor_id, Uint16 product_id);
+
+/* Function to return whether a joystick is a GameCube controller */
+extern SDL_bool SDL_IsJoystickGameCube(Uint16 vendor_id, Uint16 product_id);
 
 /* Function to return whether a joystick guid comes from the XInput driver */
 extern SDL_bool SDL_IsJoystickXInput(SDL_JoystickGUID guid);

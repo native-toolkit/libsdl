@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2018 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2019 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -528,6 +528,7 @@ SDL_RWFromFile(const char *file, const char *mode)
         char *path;
         FILE *fp;
 
+        /* !!! FIXME: why not just "char path[PATH_MAX];" ? */
         path = SDL_stack_alloc(char, PATH_MAX);
         if (path) {
             SDL_snprintf(path, PATH_MAX, "%s/%s",
