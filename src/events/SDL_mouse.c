@@ -249,6 +249,7 @@ SDL_UpdateMouseFocus(SDL_Window * window, int x, int y, Uint32 buttonstate)
     SDL_Mouse *mouse = SDL_GetMouse();
     SDL_bool inWindow = SDL_TRUE;
 
+#ifndef IPHONE
     if (window && ((window->flags & SDL_WINDOW_MOUSE_CAPTURE) == 0)) {
         int w, h;
         SDL_GetWindowSize(window, &w, &h);
@@ -256,6 +257,7 @@ SDL_UpdateMouseFocus(SDL_Window * window, int x, int y, Uint32 buttonstate)
             inWindow = SDL_FALSE;
         }
     }
+#endif
 
 /* Linux doesn't give you mouse events outside your window unless you grab
    the pointer.
