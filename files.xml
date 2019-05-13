@@ -553,6 +553,7 @@
         <section if="android">
 
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/android/SDL_androidaudio.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/audio/openslES/SDL_openslES.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/android/SDL_android.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/haptic/android/SDL_syshaptic.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/android/SDL_sysjoystick.c" />
