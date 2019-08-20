@@ -22,7 +22,6 @@
 #include "SDL_config.h"
 #else
 #include "../SDL_internal.h"
-#include "SDL_simd.h"
 #endif
 
 #if defined(__WIN32__) || defined(__WINRT__)
@@ -79,9 +78,9 @@
 #endif
 
 #if defined(__ANDROID__) && defined(__ARM_ARCH) && !defined(HAVE_GETAUXVAL)
-// #if __ARM_ARCH < 8
-// #include <cpu-features.h>
-// #endif
+#if __ARM_ARCH < 8
+#include <cpu-features.h>
+#endif
 #endif
 
 #define CPU_HAS_RDTSC   (1 << 0)
@@ -136,7 +135,7 @@ CPU_haveCPUID(void)
     : "%eax", "%ecx"
     );
 #elif defined(__GNUC__) && defined(__x86_64__)
-/* Technically, if this is being compiled under __x86_64__ then it has
+/* Technically, if this is being compiled under __x86_64__ then it has 
    CPUid by definition.  But it's nice to be able to prove it.  :)      */
     __asm__ (
 "        pushfq                      # Get original EFLAGS             \n"
@@ -378,21 +377,17 @@ CPU_haveNEON(void)
 #elif defined(__LINUX__)
     return readProcAuxvForNeon();
 #elif defined(__ANDROID__)
-    #if __ARM_ARCH < 8
     /* Use NDK cpufeatures to read either /proc/self/auxv or /proc/cpuinfo */
     {
-        // AndroidCpuFamily cpu_family = android_getCpuFamily();
-        // if (cpu_family == ANDROID_CPU_FAMILY_ARM) {
-        //     uint64_t cpu_features = android_getCpuFeatures();
-        //     if ((cpu_features & ANDROID_CPU_ARM_FEATURE_NEON) != 0) {
-        //         return 1;
-        //     }
-        // }
+        AndroidCpuFamily cpu_family = android_getCpuFamily();
+        if (cpu_family == ANDROID_CPU_FAMILY_ARM) {
+            uint64_t cpu_features = android_getCpuFeatures();
+            if ((cpu_features & ANDROID_CPU_ARM_FEATURE_NEON) != 0) {
+                return 1;
+            }
+        }
         return 0;
     }
-    #else
-    return 0; // Allow build without cpu-features for now
-    #endif
 #else
 #warning SDL_HasNEON is not implemented for this ARM platform. Write me.
     return 0;
@@ -786,7 +781,7 @@ SDL_GetSystemRAM(void)
 #endif /* __FreeBSD__ || __FreeBSD_kernel__ */
             Uint64 memsize = 0;
             size_t len = sizeof(memsize);
-
+            
             if (sysctl(mib, 2, &memsize, &len, NULL, 0) == 0) {
                 SDL_SystemRAM = (int)(memsize / (1024*1024));
             }
