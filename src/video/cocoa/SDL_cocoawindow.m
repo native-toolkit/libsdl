@@ -1466,10 +1466,9 @@ Cocoa_CreateWindow(_THIS, SDL_Window * window)
     #pragma clang diagnostic push
     #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     #endif
-    if (window->flags & SDL_WINDOW_ALLOW_HIGHDPI) {
-        if ([contentView respondsToSelector:@selector(setWantsBestResolutionOpenGLSurface:)]) {
-            [contentView setWantsBestResolutionOpenGLSurface:YES];
-        }
+    if ([contentView respondsToSelector:@selector(setWantsBestResolutionOpenGLSurface:)]) {
+        BOOL highdpi = (window->flags & SDL_WINDOW_ALLOW_HIGHDPI) != 0;
+        [contentView setWantsBestResolutionOpenGLSurface:highdpi];
     }
     #ifdef __clang__
     #pragma clang diagnostic pop
