@@ -307,17 +307,13 @@ SDL_EGL_LoadLibrary(_THIS, const char *egl_path, NativeDisplayType native_displa
     }
 #endif
 
-<<<<<<< HEAD
-    // Do not need to load dll if we static link ...
-    #ifndef NATIVE_TOOLKIT_STATIC_ANGLE
-=======
 #ifndef SDL_VIDEO_STATIC_ANGLE
->>>>>>> df0aae715053d50d02cd2e205ae98bc69b2a12ac
     /* A funny thing, loading EGL.so first does not work on the Raspberry, so we load libGL* first */
     path = SDL_getenv("SDL_VIDEO_GL_DRIVER");
     if (path != NULL) {
         egl_dll_handle = SDL_LoadObject(path);
     }
+
     if (egl_dll_handle == NULL) {
         if (_this->gl_config.profile_mask == SDL_GL_CONTEXT_PROFILE_ES) {
             if (_this->gl_config.major_version > 1) {
@@ -389,8 +385,6 @@ SDL_EGL_LoadLibrary(_THIS, const char *egl_path, NativeDisplayType native_displa
         SDL_ClearError();
     }
 #endif
-
-    #endif // NATIVE_TOOLKIT_STATIC_ANGLE
 
     _this->egl_data->dll_handle = dll_handle;
 
