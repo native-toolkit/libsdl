@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2019 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -23,6 +23,7 @@ SDL_PROC(void, glActiveTexture, (GLenum))
 SDL_PROC(void, glAttachShader, (GLuint, GLuint))
 SDL_PROC(void, glBindAttribLocation, (GLuint, GLuint, const char *))
 SDL_PROC(void, glBindTexture, (GLenum, GLuint))
+SDL_PROC(void, glBlendEquationSeparate, (GLenum, GLenum))
 SDL_PROC(void, glBlendFuncSeparate, (GLenum, GLenum, GLenum, GLenum))
 SDL_PROC(void, glClear, (GLbitfield))
 SDL_PROC(void, glClearColor, (GLclampf, GLclampf, GLclampf, GLclampf))
@@ -74,6 +75,7 @@ SDL_PROC(void, glDeleteFramebuffers, (GLsizei, const GLuint *))
 SDL_PROC(GLint, glGetAttribLocation, (GLuint, const GLchar *))
 SDL_PROC(void, glGetProgramInfoLog, (GLuint, GLsizei, GLsizei*, GLchar*))
 SDL_PROC(void, glGenBuffers, (GLsizei, GLuint *))
+SDL_PROC(void, glDeleteBuffers, (GLsizei, const GLuint *))
 SDL_PROC(void, glBindBuffer, (GLenum, GLuint))
 SDL_PROC(void, glBufferData, (GLenum, GLsizeiptr, const GLvoid *, GLenum))
 SDL_PROC(void, glBufferSubData, (GLenum, GLintptr, GLsizeiptr, const GLvoid *))

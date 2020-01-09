@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2019 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -93,7 +93,6 @@ SDL_WinRTGetFSPathUNICODE(SDL_WinRT_Path pathType)
 extern "C" const char *
 SDL_WinRTGetFSPathUTF8(SDL_WinRT_Path pathType)
 {
-
     typedef unordered_map<SDL_WinRT_Path, string> UTF8PathMap;
     static UTF8PathMap utf8Paths;
 
@@ -111,8 +110,6 @@ SDL_WinRTGetFSPathUTF8(SDL_WinRT_Path pathType)
     utf8Paths[pathType] = utf8Path;
     SDL_free(utf8Path);
     return utf8Paths[pathType].c_str();
-
-return "";
 }
 
 extern "C" char *
@@ -155,6 +152,14 @@ SDL_GetPrefPath(const char *org, const char *app)
     size_t new_wpath_len = 0;
     BOOL api_result = FALSE;
 
+    if (!app) {
+        SDL_InvalidParamError("app");
+        return NULL;
+    }
+    if (!org) {
+        org = "";
+    }
+
     srcPath = SDL_WinRTGetFSPathUNICODE(SDL_WINRT_PATH_LOCAL_FOLDER);
     if ( ! srcPath) {
         SDL_SetError("Unable to find a source path");
@@ -189,9 +194,11 @@ SDL_GetPrefPath(const char *org, const char *app)
         return NULL;
     }
 
-    SDL_wcslcat(path, L"\\", new_wpath_len + 1);
-    SDL_wcslcat(path, worg, new_wpath_len + 1);
-    SDL_free(worg);
+    if (*worg) {
+        SDL_wcslcat(path, L"\\", new_wpath_len + 1);
+        SDL_wcslcat(path, worg, new_wpath_len + 1);
+        SDL_free(worg);
+    }
 
     api_result = CreateDirectoryW(path, NULL);
     if (api_result == FALSE) {
@@ -222,3 +229,5 @@ SDL_GetPrefPath(const char *org, const char *app)
 }
 
 #endif /* __WINRT__ */
+
+/* vi: set ts=4 sw=4 expandtab: */

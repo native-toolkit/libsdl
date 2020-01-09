@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2019 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -147,9 +147,6 @@ X11_GetPixelFormatFromVisualInfo(Display * display, XVisualInfo * vinfo)
 
     return SDL_PIXELFORMAT_UNKNOWN;
 }
-
-/* Global for the error handler */
-static int vm_event, vm_error = -1;
 
 #if SDL_VIDEO_DRIVER_X11_XINERAMA
 static SDL_bool
@@ -396,9 +393,16 @@ X11_InitModes_XRandR(_THIS)
                 X11_XFree(pixmapformats);
             }
 
-            res = X11_XRRGetScreenResources(dpy, RootWindow(dpy, screen));
-            if (!res) {
-                continue;
+            res = X11_XRRGetScreenResourcesCurrent(dpy, RootWindow(dpy, screen));
+            if (!res || res->noutput == 0) {
+                if (res) {
+                    X11_XRRFreeScreenResources(res);
+                }
+
+                res = X11_XRRGetScreenResources(dpy, RootWindow(dpy, screen));
+                if (!res) {
+                    continue;
+                }
             }
 
             for (output = 0; output < res->noutput; output++) {
@@ -502,6 +506,7 @@ X11_InitModes_XRandR(_THIS)
 static SDL_bool
 CheckVidMode(Display * display, int *major, int *minor)
 {
+    int vm_event, vm_error = -1;
     /* Default the extension not available */
     *major = *minor = 0;
 
@@ -521,7 +526,6 @@ CheckVidMode(Display * display, int *major, int *minor)
     }
 
     /* Query the extension version */
-    vm_error = -1;
     if (!X11_XF86VidModeQueryExtension(display, &vm_event, &vm_error)
         || !X11_XF86VidModeQueryVersion(display, major, minor)) {
 #ifdef X11MODES_DEBUG
@@ -604,7 +608,8 @@ X11_InitModes(_THIS)
     /* require at least XRandR v1.3 */
     if (CheckXRandR(data->display, &xrandr_major, &xrandr_minor) &&
         (xrandr_major >= 2 || (xrandr_major == 1 && xrandr_minor >= 3))) {
-        return X11_InitModes_XRandR(_this);
+        if (X11_InitModes_XRandR(_this) == 0)
+            return 0;
     }
 #endif /* SDL_VIDEO_DRIVER_X11_XRANDR */
 
@@ -824,8 +829,6 @@ X11_GetDisplayModes(_THIS, SDL_VideoDisplay * sdl_display)
     int nmodes;
     XF86VidModeModeInfo ** modes;
 #endif
-    int screen_w;
-    int screen_h;
     SDL_DisplayMode mode;
 
     /* Unfortunately X11 requires the window to be created with the correct
@@ -837,11 +840,14 @@ X11_GetDisplayModes(_THIS, SDL_VideoDisplay * sdl_display)
     mode.format = sdl_display->current_mode.format;
     mode.driverdata = NULL;
 
-    screen_w = DisplayWidth(display, data->screen);
-    screen_h = DisplayHeight(display, data->screen);
-
 #if SDL_VIDEO_DRIVER_X11_XINERAMA
     if (data->use_xinerama) {
+        int screen_w;
+        int screen_h;
+
+        screen_w = DisplayWidth(display, data->screen);
+        screen_h = DisplayHeight(display, data->screen);
+
         if (data->use_vidmode && !data->xinerama_info.x_org && !data->xinerama_info.y_org &&
            (screen_w > data->xinerama_info.width || screen_h > data->xinerama_info.height)) {
             SDL_DisplayModeData *modedata;

@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2019 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -35,6 +35,7 @@ FeedAudioDevice(_THIS, const void *buf, const int buflen)
 {
     const int framelen = (SDL_AUDIO_BITSIZE(this->spec.format) / 8) * this->spec.channels;
     EM_ASM_ARGS({
+        var SDL2 = Module['SDL2'];
         var numChannels = SDL2.audio.currentOutputBuffer['numberOfChannels'];
         for (var c = 0; c < numChannels; ++c) {
             var channelData = SDL2.audio.currentOutputBuffer['getChannelData'](c);
@@ -52,7 +53,7 @@ FeedAudioDevice(_THIS, const void *buf, const int buflen)
 static void
 HandleAudioProcess(_THIS)
 {
-    SDL_AudioCallback callback = this->spec.callback;
+    SDL_AudioCallback callback = this->callbackspec.callback;
     const int stream_len = this->callbackspec.size;
 
     /* Only do something if audio is enabled */
@@ -65,11 +66,11 @@ HandleAudioProcess(_THIS)
 
     if (this->stream == NULL) {  /* no conversion necessary. */
         SDL_assert(this->spec.size == stream_len);
-        callback(this->spec.userdata, this->work_buffer, stream_len);
+        callback(this->callbackspec.userdata, this->work_buffer, stream_len);
     } else {  /* streaming/converting */
         int got;
         while (SDL_AudioStreamAvailable(this->stream) < ((int) this->spec.size)) {
-            callback(this->spec.userdata, this->work_buffer, stream_len);
+            callback(this->callbackspec.userdata, this->work_buffer, stream_len);
             if (SDL_AudioStreamPut(this->stream, this->work_buffer, stream_len) == -1) {
                 SDL_AudioStreamClear(this->stream);
                 SDL_AtomicSet(&this->enabled, 0);
@@ -90,7 +91,7 @@ HandleAudioProcess(_THIS)
 static void
 HandleCaptureProcess(_THIS)
 {
-    SDL_AudioCallback callback = this->spec.callback;
+    SDL_AudioCallback callback = this->callbackspec.callback;
     const int stream_len = this->callbackspec.size;
 
     /* Only do something if audio is enabled */
@@ -100,6 +101,7 @@ HandleCaptureProcess(_THIS)
     }
 
     EM_ASM_ARGS({
+        var SDL2 = Module['SDL2'];
         var numChannels = SDL2.capture.currentCaptureBuffer.numberOfChannels;
         for (var c = 0; c < numChannels; ++c) {
             var channelData = SDL2.capture.currentCaptureBuffer.getChannelData(c);
@@ -123,7 +125,7 @@ HandleCaptureProcess(_THIS)
 
     if (this->stream == NULL) {  /* no conversion necessary. */
         SDL_assert(this->spec.size == stream_len);
-        callback(this->spec.userdata, this->work_buffer, stream_len);
+        callback(this->callbackspec.userdata, this->work_buffer, stream_len);
     } else {  /* streaming/converting */
         if (SDL_AudioStreamPut(this->stream, this->work_buffer, this->spec.size) == -1) {
             SDL_AtomicSet(&this->enabled, 0);
@@ -135,7 +137,7 @@ HandleCaptureProcess(_THIS)
             if (got != stream_len) {
                 SDL_memset(this->work_buffer, this->callbackspec.silence, stream_len);
             }
-            callback(this->spec.userdata, this->work_buffer, stream_len);  /* Send it to the app. */
+            callback(this->callbackspec.userdata, this->work_buffer, stream_len);  /* Send it to the app. */
         }
     }
 }
@@ -145,6 +147,7 @@ static void
 EMSCRIPTENAUDIO_CloseDevice(_THIS)
 {
     EM_ASM_({
+        var SDL2 = Module['SDL2'];
         if ($0) {
             if (SDL2.capture.silenceTimer !== undefined) {
                 clearTimeout(SDL2.capture.silenceTimer);
@@ -196,11 +199,12 @@ EMSCRIPTENAUDIO_OpenDevice(_THIS, void *handle, const char *devname, int iscaptu
 
     /* based on parts of library_sdl.js */
 
-    /* create context (TODO: this puts stuff in the global namespace...)*/
+    /* create context */
     result = EM_ASM_INT({
-        if(typeof(SDL2) === 'undefined') {
-            SDL2 = {};
+        if(typeof(Module['SDL2']) === 'undefined') {
+            Module['SDL2'] = {};
         }
+        var SDL2 = Module['SDL2'];
         if (!$0) {
             SDL2.audio = {};
         } else {
@@ -246,9 +250,13 @@ EMSCRIPTENAUDIO_OpenDevice(_THIS, void *handle, const char *devname, int iscaptu
     }
     SDL_zerop(this->hidden);
 #endif
+    this->hidden = (struct SDL_PrivateAudioData *)0x1;
 
     /* limit to native freq */
-    this->spec.freq = EM_ASM_INT_V({ return SDL2.audioContext.sampleRate; });
+    this->spec.freq = EM_ASM_INT_V({
+      var SDL2 = Module['SDL2'];
+      return SDL2.audioContext.sampleRate;
+    });
 
     SDL_CalculateAudioSpec(&this->spec);
 
@@ -270,6 +278,7 @@ EMSCRIPTENAUDIO_OpenDevice(_THIS, void *handle, const char *devname, int iscaptu
            to be honest. */
 
         EM_ASM_({
+            var SDL2 = Module['SDL2'];
             var have_microphone = function(stream) {
                 //console.log('SDL audio capture: we have a microphone! Replacing silence callback.');
                 if (SDL2.capture.silenceTimer !== undefined) {
@@ -282,7 +291,7 @@ EMSCRIPTENAUDIO_OpenDevice(_THIS, void *handle, const char *devname, int iscaptu
                     if ((SDL2 === undefined) || (SDL2.capture === undefined)) { return; }
                     audioProcessingEvent.outputBuffer.getChannelData(0).fill(0.0);
                     SDL2.capture.currentCaptureBuffer = audioProcessingEvent.inputBuffer;
-                    Runtime.dynCall('vi', $2, [$3]);
+                    dynCall('vi', $2, [$3]);
                 };
                 SDL2.capture.mediaStreamNode.connect(SDL2.capture.scriptProcessorNode);
                 SDL2.capture.scriptProcessorNode.connect(SDL2.audioContext.destination);
@@ -298,7 +307,7 @@ EMSCRIPTENAUDIO_OpenDevice(_THIS, void *handle, const char *devname, int iscaptu
             SDL2.capture.silenceBuffer.getChannelData(0).fill(0.0);
             var silence_callback = function() {
                 SDL2.capture.currentCaptureBuffer = SDL2.capture.silenceBuffer;
-                Runtime.dynCall('vi', $2, [$3]);
+                dynCall('vi', $2, [$3]);
             };
 
             SDL2.capture.silenceTimer = setTimeout(silence_callback, ($1 / SDL2.audioContext.sampleRate) * 1000);
@@ -312,11 +321,12 @@ EMSCRIPTENAUDIO_OpenDevice(_THIS, void *handle, const char *devname, int iscaptu
     } else {
         /* setup a ScriptProcessorNode */
         EM_ASM_ARGS({
+            var SDL2 = Module['SDL2'];
             SDL2.audio.scriptProcessorNode = SDL2.audioContext['createScriptProcessor']($1, 0, $0);
             SDL2.audio.scriptProcessorNode['onaudioprocess'] = function (e) {
                 if ((SDL2 === undefined) || (SDL2.audio === undefined)) { return; }
                 SDL2.audio.currentOutputBuffer = e['outputBuffer'];
-                Runtime.dynCall('vi', $2, [$3]);
+                dynCall('vi', $2, [$3]);
             };
             SDL2.audio.scriptProcessorNode['connect'](SDL2.audioContext['destination']);
         }, this->spec.channels, this->spec.samples, HandleAudioProcess, this);
@@ -328,6 +338,9 @@ EMSCRIPTENAUDIO_OpenDevice(_THIS, void *handle, const char *devname, int iscaptu
 static int
 EMSCRIPTENAUDIO_Init(SDL_AudioDriverImpl * impl)
 {
+    int available;
+    int capture_available;
+
     /* Set the function pointers */
     impl->OpenDevice = EMSCRIPTENAUDIO_OpenDevice;
     impl->CloseDevice = EMSCRIPTENAUDIO_CloseDevice;
@@ -339,7 +352,7 @@ EMSCRIPTENAUDIO_Init(SDL_AudioDriverImpl * impl)
     impl->ProvidesOwnCallbackThread = 1;
 
     /* check availability */
-    const int available = EM_ASM_INT_V({
+    available = EM_ASM_INT_V({
         if (typeof(AudioContext) !== 'undefined') {
             return 1;
         } else if (typeof(webkitAudioContext) !== 'undefined') {
@@ -352,7 +365,7 @@ EMSCRIPTENAUDIO_Init(SDL_AudioDriverImpl * impl)
         SDL_SetError("No audio context available");
     }
 
-    const int capture_available = available && EM_ASM_INT_V({
+    capture_available = available && EM_ASM_INT_V({
         if ((typeof(navigator.mediaDevices) !== 'undefined') && (typeof(navigator.mediaDevices.getUserMedia) !== 'undefined')) {
             return 1;
         } else if (typeof(navigator.webkitGetUserMedia) !== 'undefined') {

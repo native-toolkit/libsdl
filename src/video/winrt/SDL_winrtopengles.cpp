@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2017 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2019 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -58,7 +58,7 @@ WINRT_GLES_LoadLibrary(_THIS, const char *path)
 {
     SDL_VideoData *video_data = (SDL_VideoData *)_this->driverdata;
 
-    if (SDL_EGL_LoadLibrary(_this, path, EGL_DEFAULT_DISPLAY) != 0) {
+    if (SDL_EGL_LoadLibrary(_this, path, EGL_DEFAULT_DISPLAY, 0) != 0) {
         return -1;
     }
 
