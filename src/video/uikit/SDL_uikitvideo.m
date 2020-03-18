@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2019 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2020 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -116,6 +116,7 @@ UIKit_CreateDevice(int devindex)
         device->HasClipboardText = UIKit_HasClipboardText;
 
         /* OpenGL (ES) functions */
+#if SDL_VIDEO_OPENGL_ES || SDL_VIDEO_OPENGL_ES2
         device->GL_MakeCurrent      = UIKit_GL_MakeCurrent;
         device->GL_GetDrawableSize  = UIKit_GL_GetDrawableSize;
         device->GL_SwapWindow       = UIKit_GL_SwapWindow;
@@ -123,6 +124,7 @@ UIKit_CreateDevice(int devindex)
         device->GL_DeleteContext    = UIKit_GL_DeleteContext;
         device->GL_GetProcAddress   = UIKit_GL_GetProcAddress;
         device->GL_LoadLibrary      = UIKit_GL_LoadLibrary;
+#endif
         device->free = UIKit_DeleteDevice;
 
 #if SDL_VIDEO_VULKAN
@@ -192,7 +194,15 @@ UIKit_IsSystemVersionAtLeast(double version)
 CGRect
 UIKit_ComputeViewFrame(SDL_Window *window, UIScreen *screen)
 {
+    SDL_WindowData *data = (__bridge SDL_WindowData *) window->driverdata;
     CGRect frame = screen.bounds;
+
+    /* Use the UIWindow bounds instead of the UIScreen bounds, when possible.
+     * The uiwindow bounds may be smaller than the screen bounds when Split View
+     * is used on an iPad. */
+    if (data != nil && data.uiwindow != nil) {
+        frame = data.uiwindow.bounds;
+    }
 
 #if !TARGET_OS_TV && (__IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_7_0)
     BOOL hasiOS7 = UIKit_IsSystemVersionAtLeast(7.0);
@@ -214,9 +224,12 @@ UIKit_ComputeViewFrame(SDL_Window *window, UIScreen *screen)
      * https://forums.developer.apple.com/thread/65337 */
     if (UIKit_IsSystemVersionAtLeast(8.0)) {
         UIInterfaceOrientation orient = [UIApplication sharedApplication].statusBarOrientation;
-        BOOL isLandscape = UIInterfaceOrientationIsLandscape(orient);
+        BOOL landscape = UIInterfaceOrientationIsLandscape(orient);
+        BOOL fullscreen = CGRectEqualToRect(screen.bounds, frame);
 
-        if (isLandscape != (frame.size.width > frame.size.height)) {
+        /* The orientation flip doesn't make sense when the window is smaller
+         * than the screen (iPad Split View, for example). */
+        if (fullscreen && (landscape != (frame.size.width > frame.size.height))) {
             float height = frame.size.width;
             frame.size.width = frame.size.height;
             frame.size.height = height;
@@ -274,7 +287,7 @@ void SDL_NSLog(const char *text)
  */
 SDL_bool SDL_IsIPad(void)
 {
-    return (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
+    return ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad);
 }
 
 #endif /* SDL_VIDEO_DRIVER_UIKIT */
