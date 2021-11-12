@@ -234,13 +234,13 @@ Android_SetScreenResolution(int surfaceWidth, int surfaceHeight, int deviceWidth
 static
 Uint32 format_to_pixelFormat(int format) {
     Uint32 pf;
-    if (format == AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM) {  /* 1 */
+    if (format == 1) {  /* AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM */
         pf = SDL_PIXELFORMAT_RGBA8888;
-    } else if (format == AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM) { /* 2 */
+    } else if (format == 2) { /* AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM */
         pf = SDL_PIXELFORMAT_RGBX8888;
-    } else if (format == AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM) { /* 3 */
+    } else if (format == 3) { /* AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM */
         pf = SDL_PIXELFORMAT_RGB24;
-    } else if (format == AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM) { /* 4*/
+    } else if (format == 4) { /* AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM */
         pf = SDL_PIXELFORMAT_RGB565;
     } else if (format == 5) {
         pf = SDL_PIXELFORMAT_BGRA8888;
