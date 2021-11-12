@@ -33,6 +33,8 @@
 #endif
 #include "SDL_hints.h"
 
+#if SDL_USE_LIBDBUS
+
 #define FCITX_DBUS_SERVICE "org.freedesktop.portal.Fcitx"
 
 #define FCITX_IM_DBUS_PATH "/org/freedesktop/portal/inputmethod"
@@ -425,5 +427,6 @@ SDL_Fcitx_PumpEvents(void)
         usleep(10);
     }
 }
+#endif
 
 /* vi: set ts=4 sw=4 expandtab: */

@@ -411,9 +411,6 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/haptic/linux/SDL_syshaptic.c" />
             <!-- <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/hidapi/linux/hid.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/hidapi/linux/hidraw.cpp" /> -->
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/bsd/SDL_bsdjoystick.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/bsd/SDL_sysjoystick.c" />
-            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/power/linux/SDL_syspower.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/linux/SDL_evdev.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/linux/SDL_evdev_capabilities.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/linux/SDL_evdev_kbd.c" />
@@ -424,6 +421,7 @@
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/linux/SDL_ime.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/linux/SDL_threadprio.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/core/unix/SDL_poll.c" />
+            <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/power/linux/SDL_syspower.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/joystick/linux/SDL_sysjoystick.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/locale/unix/SDL_syslocale.c" />
             <file name="${NATIVE_TOOLKIT_PATH}/sdl/src/misc/unix/SDL_sysurl.c" />
